@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent"
-    tools:layout_width="match_parent">
+    tools:layout_width="wrap_content">
 
     <LinearLayout
 
@@ -16,20 +16,19 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="149dp"
-            android:layout_height="150dp"
+            android:layout_width="210dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/homebutton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/homebutton" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="149dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:ellipsize="end"
             android:gravity="center"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
