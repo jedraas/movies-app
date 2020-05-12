@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Search">
+
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="132dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="@color/design_default_color_secondary_variant"
+        app:elevation="4dp"
+        app:itemIconTint="@color/design_default_color_on_secondary"
+        app:itemRippleColor="#FFFFFF"
+        app:itemTextColor="@android:color/white"
+        app:labelVisibilityMode="auto"
+        app:menu="@menu/bottom_navigation"
+        tools:ignore="MissingConstraints" >
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
