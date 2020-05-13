@@ -39,27 +39,6 @@ public void signUpClicked(View view){
 
 
 
-
-
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try  {
-                    //Your code goes here
-                   // MainActivity.this.recommended();
-                //  MainActivity.this.find();
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-        thread.start();
     }
 
 

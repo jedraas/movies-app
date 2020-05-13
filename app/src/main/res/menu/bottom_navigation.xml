@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Home" android:id="@+id/home"></item>
-    <item android:title="Search" android:id="@+id/search"></item>
-    <item android:title="Favourites" android:id="@+id/favourites"></item>
+    <item
+        android:title="Home"
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:enabled="true"
+        />
+
+
+    <item
+        android:title="Search"
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:enabled="true"
+        />
+
+    <item
+        android:title="Favourites"
+        android:id="@+id/favourites"
+        android:icon="@drawable/ic_star_black_24dp"
+        android:enabled="true"
+        />
+
+
 
 
 </menu>

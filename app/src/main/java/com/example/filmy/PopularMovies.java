@@ -137,7 +137,11 @@ public class PopularMovies extends AppCompatActivity {
 
         setTitle("Popular Movies");
 
+
         bottomNavigation();
+
+        popular();
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -149,7 +153,6 @@ public class PopularMovies extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
 
-        popular();
 
     }
 

@@ -19,7 +19,7 @@
             android:layout_width="210dp"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/homebutton" />
+            android:src="@drawable/home" />
 
         <TextView
             android:id="@+id/title"
