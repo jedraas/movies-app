@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/design_default_color_secondary_variant"
-        app:itemIconTint="@color/cardview_light_background"
+        app:itemIconTint="@color/design_default_color_background"
         app:itemTextColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/recycler"
         app:menu="@menu/bottom_navigation">
