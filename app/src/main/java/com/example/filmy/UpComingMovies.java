@@ -2,8 +2,13 @@ package com.example.filmy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,12 +17,18 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 public class UpComingMovies extends AppCompatActivity {
 
+    RecyclerView recyclerView;
+    MovieAdapter movieAdapter;
+    ArrayList<MovieDb> list = new ArrayList<>();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,10 +89,35 @@ public class UpComingMovies extends AppCompatActivity {
     }
 
    void upComing(){
-       TmdbMovies upComing = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-       MovieResultsPage resultUpComing = upComing.getUpcoming(null, null, null);
-       Log.i("Upcoming movies: ", "" + resultUpComing.getResults());
+       DownloadMovie downloadMovie = new DownloadMovie();
+       downloadMovie.execute();
+
+
    }
+
+    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
+
+        @Override
+        protected MovieResultsPage doInBackground(String... strings) {
+            TmdbMovies upComing = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+            MovieResultsPage resultUpComing = upComing.getUpcoming(null, null, null);
+            return resultUpComing;
+        }
+
+        @Override
+        protected void onPostExecute(MovieResultsPage resultUpComing) {
+            super.onPostExecute(resultUpComing);
+
+            for(MovieDb movieDb : resultUpComing){
+
+                list.add(movieDb);
+            }
+
+            movieAdapter.notifyDataSetChanged();
+
+        }
+    }
+
 
 
     @Override
@@ -93,24 +129,19 @@ public class UpComingMovies extends AppCompatActivity {
 
         bottomNavigation();
 
+        upComing();
 
-        Thread thread = new Thread(new Runnable() {
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        movieAdapter = new MovieAdapter(this, list);
+        recyclerView.setAdapter(movieAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-            @Override
-            public void run() {
-                try  {
-
-                    upComing();
 
 
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
 
     }
 
