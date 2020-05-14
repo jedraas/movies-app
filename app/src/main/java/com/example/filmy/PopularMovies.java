@@ -152,8 +152,6 @@ public class PopularMovies extends AppCompatActivity {
         recyclerView.setAdapter(movieAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-
-
     }
 
 
