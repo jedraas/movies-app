@@ -87,13 +87,13 @@ public class Favourites extends AppCompatActivity {
 
         bottomNavigation();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-       // movieAdapter = new MovieAdapter(this, list);
-      //  recyclerView.setAdapter(movieAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+//        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+//        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+//        recyclerView.setLayoutManager(mLayoutManager);
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        movieAdapter = new MovieAdapter(this, list);
+//        recyclerView.setAdapter(movieAdapter);
+//        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 }
