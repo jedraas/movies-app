@@ -34,6 +34,8 @@ public class UpComingMovies extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
+        MenuItem item = menu.findItem(R.id.upComing);
+        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
