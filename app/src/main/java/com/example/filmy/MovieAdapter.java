@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import info.movito.themoviedbapi.model.MovieDb;
@@ -25,7 +26,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
         Context context;
         ArrayList<MovieDb> list;
+
         public class MyViewHolder extends RecyclerView.ViewHolder{
+
             public TextView title;
             public ImageView imageView;
 
@@ -35,6 +38,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                 title = (TextView) view.findViewById(R.id.title);
                 imageView = (ImageView) view.findViewById(R.id.image);
 
+
             }
 
         }
@@ -42,25 +46,27 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             this.context = context;
             this.list = list;
         }
-        @NonNull
+
         @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
             View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_card, viewGroup, false);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetail.class);
-                    context.startActivity(intent);
-                }
-            });
             return new MyViewHolder(itemView);
         }
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+        public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
             myViewHolder.title.setText(list.get(i).getTitle());
             String path = "https://image.tmdb.org/t/p/w200" + list.get(i).getPosterPath();
             Picasso.get().load(path).into(myViewHolder.imageView);
+            final int position = myViewHolder.getAdapterPosition();
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
 
+                    Intent intent = new Intent(context, MovieDetail.class);
+                    intent.putExtra("movieDB", list.get(position));
+                    context.startActivity(intent);
+                }
+            });
 
 
 
