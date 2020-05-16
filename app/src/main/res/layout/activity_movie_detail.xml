@@ -68,11 +68,12 @@
                 android:background="@color/colorButtonWatch"
                 android:onClick="watchTrailer"
                 android:text="Watch Trailer"
+                android:textAppearance="@android:style/TextAppearance.Material.Widget"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.7"
                 app:layout_constraintStart_toEndOf="@+id/poster"
-                app:layout_constraintTop_toBottomOf="@+id/text_title" />
+                app:layout_constraintTop_toBottomOf="@+id/genres" />
 
             <Button
                 android:id="@+id/favouritesButton"
@@ -81,7 +82,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:background="@color/colorButtonFavourite"
-                android:onClick="addToFavourites"
+                android:onClick="favouriteButtonClicked"
                 android:text="Add to favourites"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -91,12 +92,14 @@
 
 
             <com.google.android.material.chip.ChipGroup
+                android:id="@+id/genres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_title"
+                app:layout_constraintStart_toEndOf="@+id/poster"
                 tools:layout_editor_absoluteY="221dp">
 
             </com.google.android.material.chip.ChipGroup>
