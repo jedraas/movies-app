@@ -7,20 +7,31 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-
+import com.example.filmy.database.Movie;
+import com.example.filmy.database.MovieDao;
+import com.example.filmy.database.MovieDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import java.util.ArrayList;
+import java.util.List;
+import info.movito.themoviedbapi.model.MovieDb;
 
-public class Favourites extends AppCompatActivity {
 
-  //  private Movie movie;
-   //private MovieDatabase movieDatabase;
+public class Favourites extends AppCompatActivity  {
+
+
+
+
+
+    MovieDao movieDao;
+    RecyclerView recyclerView;
+    MovieAdapter movieAdapter;
+    ArrayList<MovieDb> list = new ArrayList<>();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,6 +90,48 @@ public class Favourites extends AppCompatActivity {
             }
         });
     }
+
+    public class GetMovieFromDatabase extends AsyncTask<String, Void, List<Movie>> {
+
+        @Override
+        protected List<Movie> doInBackground(String... strings) {
+            return movieDao.getAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<Movie> movies) {
+            super.onPostExecute(movies);
+
+            //clear favourite
+
+            list.clear();
+
+            for (Movie movie : movies) {
+
+                list.add(movie.movieDB);
+            }
+
+            movieAdapter.notifyDataSetChanged();
+
+        }
+    }
+
+    void favourite(){
+
+        GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
+        getMovieFromDatabase.execute();
+
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        favourite();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,17 +140,19 @@ public class Favourites extends AppCompatActivity {
         setTitle("Favourites Movies");
         bottomNavigation();
 
-        //MovieDatabase db = Room.databaseBuilder(getApplicationContext(), MovieDatabase.class, "movies").build();
+        movieDao = MovieDatabase.getMovieDatabase(this).movieDao();
 
 
 
-//        recyclerView = (RecyclerView) findViewById(R.id.recycler);
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-//        recyclerView.setLayoutManager(mLayoutManager);
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        movieAdapter = new MovieAdapter(this, list);
-//        recyclerView.setAdapter(movieAdapter);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        movieAdapter = new MovieAdapter(this, list);
+        recyclerView.setAdapter(movieAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+
+
     }
 }
