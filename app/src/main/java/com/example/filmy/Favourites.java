@@ -25,9 +25,6 @@ import info.movito.themoviedbapi.model.MovieDb;
 public class Favourites extends AppCompatActivity  {
 
 
-
-
-
     MovieDao movieDao;
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
@@ -103,7 +100,6 @@ public class Favourites extends AppCompatActivity  {
             super.onPostExecute(movies);
 
             //clear favourite
-
             list.clear();
 
             for (Movie movie : movies) {
@@ -123,8 +119,6 @@ public class Favourites extends AppCompatActivity  {
 
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -141,7 +135,6 @@ public class Favourites extends AppCompatActivity  {
         bottomNavigation();
 
         movieDao = MovieDatabase.getMovieDatabase(this).movieDao();
-
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
