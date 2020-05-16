@@ -3,4 +3,9 @@
     <color name="colorPrimary">#1C818A</color>
     <color name="colorPrimaryDark">#1C818A</color>
     <color name="colorAccent">#4527A0</color>
+    <color name="colorButtonWatch">#BA8EC1</color>
+    <color name="colorButtonFavourite">#E9EA4B</color>
+    <color name="colorBackground">#FAFAFA</color>
+
+
 </resources>

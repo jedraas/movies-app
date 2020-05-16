@@ -1,13 +1,16 @@
 package com.example.filmy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,23 +18,15 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.TmdbPeople;
-import info.movito.themoviedbapi.model.Artwork;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.MovieImages;
 import info.movito.themoviedbapi.model.Video;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
-import info.movito.themoviedbapi.model.people.Person;
-import info.movito.themoviedbapi.model.people.PersonCast;
-import info.movito.themoviedbapi.model.people.PersonPeople;
+
 
 public class MovieDetail extends AppCompatActivity {
 
@@ -40,6 +35,12 @@ public class MovieDetail extends AppCompatActivity {
     ImageView imagePoster;
     MovieDb movieDB;
     Button trailerButton;
+    Button favouritesButton;
+    Credits credits;
+
+    RecyclerView rvCast;
+    CreditsAdapter creditsAdapter;
+
 
     public void watchTrailer(View view){
 
@@ -47,6 +48,12 @@ public class MovieDetail extends AppCompatActivity {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
     }
+
+    public void addToFavourites(View view){
+        Intent intent = new Intent(this, Favourites.class);
+        startActivity(intent);
+    }
+
 
     public class DownloadMovie extends AsyncTask<Integer, Void, List<Video>> {
 
@@ -57,14 +64,10 @@ public class MovieDetail extends AppCompatActivity {
             List<Video> resultVideo =  video.getVideos(movieID, null);
             return resultVideo;
 
-
         }
-
         @Override
         protected void onPostExecute(List<Video> resultVideo) {
             super.onPostExecute(resultVideo);
-
-
 
             for (Video video: resultVideo) {
 
@@ -76,12 +79,12 @@ public class MovieDetail extends AppCompatActivity {
 
             }
 
-
-
         }
+
     }
 
-/*    //CAST
+
+    //CAST
     public class DownloadCast extends AsyncTask<Integer, Void, Credits> {
 
         @Override
@@ -99,9 +102,14 @@ public class MovieDetail extends AppCompatActivity {
             super.onPostExecute(resultCredits);
 
 
+           // creditsAdapter.notifyDataSetChanged();
+
+
+
+
 
         }
-    }*/
+    }
 
 
     void detail() {
@@ -109,7 +117,13 @@ public class MovieDetail extends AppCompatActivity {
         downloadMovie.execute(movieDB.getId());
     }
 
-    @SuppressLint("ResourceType")
+
+    void credits() {
+        DownloadCast downloadCast = new DownloadCast();
+        downloadCast.execute(movieDB.getId());
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,8 +145,8 @@ public class MovieDetail extends AppCompatActivity {
         TextView textTotalVote = (TextView) findViewById(R.id.textTotalVotes);
         TextView textDate = (TextView) findViewById(R.id.textDate);
         trailerButton = (Button) findViewById(R.id.trailers);
-
         trailerButton.setVisibility(View.INVISIBLE);
+        favouritesButton = (Button) findViewById(R.id.favouritesButton);
 
 
 
@@ -164,8 +178,17 @@ public class MovieDetail extends AppCompatActivity {
         //przekazanie daty
         textDate.setText(movieDB.getReleaseDate());
 
-
+       credits();
         detail();
+
+        rvCast = (RecyclerView) findViewById(R.id.rvCast);
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        rvCast.setLayoutManager(mLayoutManager);
+        rvCast.setItemAnimator(new DefaultItemAnimator());
+        //creditsAdapter = new CreditsAdapter(this, list);
+        rvCast.setAdapter(creditsAdapter);
+        rvCast.addItemDecoration(new DividerItemDecoration(rvCast.getContext(), DividerItemDecoration.VERTICAL));
 
 
     }

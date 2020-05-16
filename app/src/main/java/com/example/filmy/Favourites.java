@@ -14,11 +14,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Favourites extends AppCompatActivity {
 
-    RecyclerView recyclerView;
+  //  private Movie movie;
+   //private MovieDatabase movieDatabase;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,9 +85,11 @@ public class Favourites extends AppCompatActivity {
         setContentView(R.layout.activity_favourites);
 
         setTitle("Favourites Movies");
-
-
         bottomNavigation();
+
+        //MovieDatabase db = Room.databaseBuilder(getApplicationContext(), MovieDatabase.class, "movies").build();
+
+
 
 //        recyclerView = (RecyclerView) findViewById(R.id.recycler);
 //        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
