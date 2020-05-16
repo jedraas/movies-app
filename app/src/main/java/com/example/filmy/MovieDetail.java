@@ -3,19 +3,30 @@ package com.example.filmy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.filmy.database.Movie;
+import com.example.filmy.database.MovieDao;
+import com.example.filmy.database.MovieDatabase;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,8 +35,10 @@ import java.util.List;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.Credits;
+import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.Video;
+import info.movito.themoviedbapi.model.people.PersonCast;
 
 
 public class MovieDetail extends AppCompatActivity {
@@ -36,12 +49,42 @@ public class MovieDetail extends AppCompatActivity {
     MovieDb movieDB;
     Button trailerButton;
     Button favouritesButton;
-    Credits credits;
-
     RecyclerView rvCast;
-    CreditsAdapter creditsAdapter;
+    CastAdapter castAdapter;
+    ChipGroup genres;
+    MovieDao movieDao;
+    ArrayList<PersonCast> cast = new ArrayList();
 
 
+    //shake device to add/remove favourite
+    private SensorManager mSensorManager;
+    private float mAccel; // acceleration apart from gravity
+    private float mAccelCurrent; // current acceleration including gravity
+    private float mAccelLast; // last acceleration including gravity
+
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+
+        public void onSensorChanged(SensorEvent se) {
+            float x = se.values[0];
+            float y = se.values[1];
+            float z = se.values[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta; // perform low-cut filter
+            if (mAccel > 5) {
+                Toast toast = Toast.makeText(getApplicationContext(), MovieDetail.this.isFavourite()?"Remove from favourites" : "Added to favourites.", Toast.LENGTH_LONG);
+                toast.show();
+                MovieDetail.this.favouriteButtonClicked(null);
+            }
+        }
+
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
+
+//button watchTrailer
     public void watchTrailer(View view){
 
         String url = "https://www.youtube.com/watch?v=" + trailer.getKey();
@@ -49,12 +92,75 @@ public class MovieDetail extends AppCompatActivity {
         startActivity(browserIntent);
     }
 
-    public void addToFavourites(View view){
-        Intent intent = new Intent(this, Favourites.class);
-        startActivity(intent);
+    //button add/remove favourite
+    public void favouriteButtonClicked(View view){
+        if(isFavourite()){
+            removeFromFavourites();
+        } else{
+            addToFavourites();
+        }
     }
 
+    public void addToFavourites(){
+        Movie movie = new Movie();
+        movie.movieDB = movieDB;
+        movie.title = movieDB.getTitle();
+        movie.movieID = movieDB.getId();
+        movie.poster = movieDB.getPosterPath();
+        movieDao.insertAll(movie);
+        updateFavouriteButton(true);
+    }
 
+    public boolean isFavourite() {
+        List<Movie> favourites = movieDao.getMoviesByID(movieDB.getId());
+
+        if(favourites.isEmpty()){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void removeFromFavourites(){
+        movieDao.deleteByID(movieDB.getId());
+        updateFavouriteButton(false);
+    }
+
+    public void updateFavouriteButton(boolean favourite){
+        if(favourite){
+            favouritesButton.setText("Remove from favourites");
+        } else {
+            favouritesButton.setText("Add to favourites");
+        }
+    }
+
+//Genres
+    public class DownloadMovieDetail extends AsyncTask<Integer, Void, MovieDb> {
+
+        @Override
+        protected MovieDb doInBackground(Integer... strings) {
+            Integer movieID = strings[0];
+            TmdbMovies genre = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+            MovieDb resultGenre =  genre.getMovie(movieID, null);
+            return resultGenre;
+
+        }
+        @Override
+        protected void onPostExecute(MovieDb resultGenre) {
+            super.onPostExecute(resultGenre);
+
+            for(Genre genre : resultGenre.getGenres()){
+
+                Chip chip = (Chip) LayoutInflater.from(MovieDetail.this).inflate(R.layout.genres_chip, MovieDetail.this.genres, false);
+                chip.setText(genre.getName());
+                MovieDetail.this.genres.addView(chip);
+            }
+
+            }
+
+        }
+
+ //Trailer
     public class DownloadMovie extends AsyncTask<Integer, Void, List<Video>> {
 
         @Override
@@ -83,8 +189,7 @@ public class MovieDetail extends AppCompatActivity {
 
     }
 
-
-    //CAST
+    //Cast
     public class DownloadCast extends AsyncTask<Integer, Void, Credits> {
 
         @Override
@@ -101,36 +206,44 @@ public class MovieDetail extends AppCompatActivity {
         protected void onPostExecute(Credits resultCredits) {
             super.onPostExecute(resultCredits);
 
+            for(PersonCast personCast : resultCredits.getCast()){
 
-           // creditsAdapter.notifyDataSetChanged();
-
-
-
-
+                cast.add(personCast);
+            }
+           castAdapter.notifyDataSetChanged();
 
         }
     }
 
-
-    void detail() {
+    void credits() {
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute(movieDB.getId());
-    }
 
-
-    void credits() {
         DownloadCast downloadCast = new DownloadCast();
         downloadCast.execute(movieDB.getId());
+
+        DownloadMovieDetail downloadMovieDetail = new DownloadMovieDetail();
+        downloadMovieDetail.execute(movieDB.getId());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+    }
+    //shake off out of activity moviedetail
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-
-
-
 
         movieDB = (MovieDb) getIntent().getSerializableExtra("movieDB");
 
@@ -147,9 +260,13 @@ public class MovieDetail extends AppCompatActivity {
         trailerButton = (Button) findViewById(R.id.trailers);
         trailerButton.setVisibility(View.INVISIBLE);
         favouritesButton = (Button) findViewById(R.id.favouritesButton);
+        genres = (ChipGroup) findViewById(R.id.genres);
 
+        movieDao = MovieDatabase.getMovieDatabase(this).movieDao();
 
+        updateFavouriteButton(isFavourite());
 
+        credits();
 
         //backdrop
         String backdropPath = "https://image.tmdb.org/t/p/w200" + movieDB.getBackdropPath();
@@ -178,17 +295,23 @@ public class MovieDetail extends AppCompatActivity {
         //przekazanie daty
         textDate.setText(movieDB.getReleaseDate());
 
-       credits();
-        detail();
 
+        //rv cast
         rvCast = (RecyclerView) findViewById(R.id.rvCast);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         rvCast.setLayoutManager(mLayoutManager);
         rvCast.setItemAnimator(new DefaultItemAnimator());
-        //creditsAdapter = new CreditsAdapter(this, list);
-        rvCast.setAdapter(creditsAdapter);
+        castAdapter = new CastAdapter(this, cast);
+        rvCast.setAdapter(castAdapter);
         rvCast.addItemDecoration(new DividerItemDecoration(rvCast.getContext(), DividerItemDecoration.VERTICAL));
+
+        //shake device sensor
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
 
 
     }
