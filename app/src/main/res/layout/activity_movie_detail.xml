@@ -20,6 +20,7 @@
             tools:context=".MovieDetail">
 
 
+
             <ImageView
                 android:id="@+id/backdrop"
                 android:layout_width="match_parent"
@@ -38,10 +39,8 @@
                 android:layout_marginTop="15dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="@+id/backdrop"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/backdrop"
-                app:layout_constraintTop_toTopOf="@id/favouritesButton"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintVertical_bias="0.581"
                 app:srcCompat="@drawable/logo" />
 
@@ -50,7 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:text="Title"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
@@ -59,21 +58,40 @@
                 app:layout_constraintStart_toEndOf="@+id/poster"
                 app:layout_constraintTop_toBottomOf="@+id/backdrop" />
 
+            <HorizontalScrollView
+                android:id="@+id/hscroll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/poster"
+                app:layout_constraintTop_toBottomOf="@+id/text_title">
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+
+
             <Button
                 android:id="@+id/trailers"
                 android:layout_width="190dp"
                 android:layout_height="35dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@color/colorButtonWatch"
                 android:onClick="watchTrailer"
                 android:text="Watch Trailer"
+                android:textAllCaps="true"
                 android:textAppearance="@android:style/TextAppearance.Material.Widget"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.7"
                 app:layout_constraintStart_toEndOf="@+id/poster"
-                app:layout_constraintTop_toBottomOf="@+id/genres" />
+                app:layout_constraintTop_toBottomOf="@+id/hscroll" />
 
             <Button
                 android:id="@+id/favouritesButton"
@@ -84,42 +102,43 @@
                 android:background="@color/colorButtonFavourite"
                 android:onClick="favouriteButtonClicked"
                 android:text="Add to favourites"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.7"
                 app:layout_constraintStart_toEndOf="@+id/poster"
-                app:layout_constraintTop_toBottomOf="@+id/trailers" />
+                app:layout_constraintTop_toBottomOf="@+id/trailers"
+                app:layout_constraintLeft_toRightOf="@id/poster"/>
 
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/genres"
+            <TextView
+                android:id="@+id/textRuntime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="100dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="310dp"
+                android:textColor="@android:color/background_dark"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_title"
-                app:layout_constraintStart_toEndOf="@+id/poster"
-                tools:layout_editor_absoluteY="221dp">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/poster" />
 
-            </com.google.android.material.chip.ChipGroup>
 
             <View
                 android:id="@+id/view"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/favouritesButton" />
+                app:layout_constraintTop_toBottomOf="@+id/textRuntime" />
 
 
             <TextView
                 android:id="@+id/textVotes"
-                android:layout_width="54dp"
-                android:layout_height="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="330dp"
@@ -170,18 +189,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/textIconLanguage" />
 
             <TextView
+                android:id="@+id/textReleaseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="46dp"
+                android:text="Release Date"
+                android:textColor="@android:color/background_dark"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <TextView
                 android:id="@+id/textDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="48dp"
                 android:text="Date"
                 android:textColor="@android:color/background_dark"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
+                app:layout_constraintTop_toBottomOf="@+id/textReleaseDate" />
 
             <View
                 android:id="@+id/view2"
@@ -198,7 +231,7 @@
                 android:id="@+id/overview"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-black"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
@@ -220,8 +253,8 @@
                 android:text="TextOverview"
                 android:textColor="@android:color/background_dark"
                 android:textStyle="normal"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 app:layout_constraintTop_toBottomOf="@+id/overview" />
 
 
@@ -229,7 +262,7 @@
                 android:id="@+id/textCast"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="340dp"
                 android:fontFamily="sans-serif-black"
                 android:paddingStart="16dp"
@@ -245,7 +278,7 @@
                 android:id="@+id/rvCast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
