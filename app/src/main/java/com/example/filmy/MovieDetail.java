@@ -1,6 +1,7 @@
 package com.example.filmy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +17,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -44,8 +47,9 @@ import info.movito.themoviedbapi.model.people.PersonCast;
 public class MovieDetail extends AppCompatActivity {
 
     Video trailer;
-    ImageView imageBackground;
+    ImageView imageBackdrop;
     ImageView imagePoster;
+    TextView textRuntime;
     MovieDb movieDB;
     Button trailerButton;
     Button favouritesButton;
@@ -140,20 +144,23 @@ public class MovieDetail extends AppCompatActivity {
         @Override
         protected MovieDb doInBackground(Integer... strings) {
             Integer movieID = strings[0];
-            TmdbMovies genre = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieDb resultGenre =  genre.getMovie(movieID, null);
-            return resultGenre;
+            TmdbMovies detail = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+            MovieDb resultDetail =  detail.getMovie(movieID, null);
+            return resultDetail;
 
         }
         @Override
-        protected void onPostExecute(MovieDb resultGenre) {
-            super.onPostExecute(resultGenre);
+        protected void onPostExecute(MovieDb resultDetail) {
+            super.onPostExecute(resultDetail);
 
-            for(Genre genre : resultGenre.getGenres()){
+            for(Genre genre : resultDetail.getGenres()){
 
                 Chip chip = (Chip) LayoutInflater.from(MovieDetail.this).inflate(R.layout.genres_chip, MovieDetail.this.genres, false);
                 chip.setText(genre.getName());
                 MovieDetail.this.genres.addView(chip);
+                String runtime = "<b>Time: </b>" + Integer.toString(resultDetail.getRuntime()) + " min";
+                textRuntime.setText(HtmlCompat.fromHtml(runtime, HtmlCompat.FROM_HTML_MODE_LEGACY));
+
             }
 
             }
@@ -233,6 +240,7 @@ public class MovieDetail extends AppCompatActivity {
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
     }
+
     //shake off out of activity moviedetail
     @Override
     protected void onPause() {
@@ -250,13 +258,14 @@ public class MovieDetail extends AppCompatActivity {
         setTitle(movieDB.getTitle());
 
         imagePoster = (ImageView) findViewById(R.id.poster);
-        imageBackground = (ImageView) findViewById(R.id.backdrop);
+        imageBackdrop = (ImageView) findViewById(R.id.backdrop);
         TextView textTitle = (TextView) findViewById(R.id.text_title);
         TextView textOverview = (TextView) findViewById(R.id.textOverview);
         TextView textLanguage = (TextView) findViewById(R.id.textLanguage);
         TextView textVote = (TextView) findViewById(R.id.textVotes);
         TextView textTotalVote = (TextView) findViewById(R.id.textTotalVotes);
         TextView textDate = (TextView) findViewById(R.id.textDate);
+        textRuntime = (TextView) findViewById(R.id.textRuntime);
         trailerButton = (Button) findViewById(R.id.trailers);
         trailerButton.setVisibility(View.INVISIBLE);
         favouritesButton = (Button) findViewById(R.id.favouritesButton);
@@ -270,7 +279,7 @@ public class MovieDetail extends AppCompatActivity {
 
         //backdrop
         String backdropPath = "https://image.tmdb.org/t/p/w200" + movieDB.getBackdropPath();
-        Picasso.get().load(backdropPath).into(MovieDetail.this.imageBackground);
+        Picasso.get().load(backdropPath).into(MovieDetail.this.imageBackdrop);
 
         //poster
         String posterPath = "https://image.tmdb.org/t/p/w200" + movieDB.getPosterPath();
@@ -286,7 +295,7 @@ public class MovieDetail extends AppCompatActivity {
         //przekazanie language
         textLanguage.setText(movieDB.getOriginalLanguage());
 
-//        //przekazanie vote
+        //przekazanie vote
         textVote.setText(Float.toString(movieDB.getVoteAverage()) + "/10");
 
         //przekazanie totalvote
@@ -298,7 +307,7 @@ public class MovieDetail extends AppCompatActivity {
 
         //rv cast
         rvCast = (RecyclerView) findViewById(R.id.rvCast);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false);
         //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         rvCast.setLayoutManager(mLayoutManager);
         rvCast.setItemAnimator(new DefaultItemAnimator());
