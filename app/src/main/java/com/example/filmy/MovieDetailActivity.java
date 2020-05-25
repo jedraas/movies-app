@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -17,7 +16,6 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -44,7 +42,7 @@ import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
 
 
-public class MovieDetail extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity {
 
     Video trailer;
     ImageView imageBackdrop;
@@ -77,9 +75,9 @@ public class MovieDetail extends AppCompatActivity {
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta; // perform low-cut filter
             if (mAccel > 5) {
-                Toast toast = Toast.makeText(getApplicationContext(), MovieDetail.this.isFavourite()?"Remove from favourites" : "Added to favourites.", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getApplicationContext(), MovieDetailActivity.this.isFavourite()?"Remove from favourites" : "Added to favourites.", Toast.LENGTH_LONG);
                 toast.show();
-                MovieDetail.this.favouriteButtonClicked(null);
+                MovieDetailActivity.this.favouriteButtonClicked(null);
             }
         }
 
@@ -138,7 +136,7 @@ public class MovieDetail extends AppCompatActivity {
         }
     }
 
-//Genres
+//Detail (genres, runtime)
     public class DownloadMovieDetail extends AsyncTask<Integer, Void, MovieDb> {
 
         @Override
@@ -155,17 +153,17 @@ public class MovieDetail extends AppCompatActivity {
 
             for(Genre genre : resultDetail.getGenres()){
 
-                Chip chip = (Chip) LayoutInflater.from(MovieDetail.this).inflate(R.layout.genres_chip, MovieDetail.this.genres, false);
+                Chip chip = (Chip) LayoutInflater.from(MovieDetailActivity.this).inflate(R.layout.genres_chip, MovieDetailActivity.this.genres, false);
                 chip.setText(genre.getName());
-                MovieDetail.this.genres.addView(chip);
+                MovieDetailActivity.this.genres.addView(chip);
                 String runtime = "<b>Time: </b>" + Integer.toString(resultDetail.getRuntime()) + " min";
                 textRuntime.setText(HtmlCompat.fromHtml(runtime, HtmlCompat.FROM_HTML_MODE_LEGACY));
 
-            }
-
-            }
+                }
 
         }
+
+    }
 
  //Trailer
     public class DownloadMovie extends AsyncTask<Integer, Void, List<Video>> {
@@ -185,8 +183,8 @@ public class MovieDetail extends AppCompatActivity {
             for (Video video: resultVideo) {
 
                 if("Trailer".equals(video.getType())){
-                    MovieDetail.this.trailer = video;
-                    MovieDetail.this.trailerButton.setVisibility(View.VISIBLE);
+                    MovieDetailActivity.this.trailer = video;
+                    MovieDetailActivity.this.trailerButton.setVisibility(View.VISIBLE);
                     break;
                 }
 
@@ -222,7 +220,7 @@ public class MovieDetail extends AppCompatActivity {
         }
     }
 
-    void credits() {
+    public void download() {
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute(movieDB.getId());
 
@@ -275,45 +273,45 @@ public class MovieDetail extends AppCompatActivity {
 
         updateFavouriteButton(isFavourite());
 
-        credits();
+        download();
 
         //backdrop
         String backdropPath = "https://image.tmdb.org/t/p/w200" + movieDB.getBackdropPath();
-        Picasso.get().load(backdropPath).into(MovieDetail.this.imageBackdrop);
+        Picasso.get().load(backdropPath).into(MovieDetailActivity.this.imageBackdrop);
 
         //poster
         String posterPath = "https://image.tmdb.org/t/p/w200" + movieDB.getPosterPath();
-        Picasso.get().load(posterPath).into(MovieDetail.this.imagePoster);
+        Picasso.get().load(posterPath).into(MovieDetailActivity.this.imagePoster);
 
-        //przekazanie tytulu
+        //title
         textTitle.setText(movieDB.getTitle());
 
 
-        //przekazanie overview
+        //overview
         textOverview.setText(movieDB.getOverview());
 
-        //przekazanie language
+        //language
         textLanguage.setText(movieDB.getOriginalLanguage());
 
-        //przekazanie vote
+        //vote
         textVote.setText(Float.toString(movieDB.getVoteAverage()) + "/10");
 
-        //przekazanie totalvote
+        //totalvote
         textTotalVote.setText(Integer.toString(movieDB.getVoteCount()));
 
-        //przekazanie daty
+        //date
         textDate.setText(movieDB.getReleaseDate());
 
 
         //rv cast
         rvCast = (RecyclerView) findViewById(R.id.rvCast);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false);
-        //RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         rvCast.setLayoutManager(mLayoutManager);
         rvCast.setItemAnimator(new DefaultItemAnimator());
         castAdapter = new CastAdapter(this, cast);
         rvCast.setAdapter(castAdapter);
         rvCast.addItemDecoration(new DividerItemDecoration(rvCast.getContext(), DividerItemDecoration.VERTICAL));
+
 
         //shake device sensor
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

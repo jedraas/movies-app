@@ -2,6 +2,8 @@ package com.example.filmy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.widget.SearchView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -10,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,12 +21,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.TmdbSearch;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
-public class NowPlayingMovies extends AppCompatActivity {
+public class SearchMoviesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+
+    SearchView searchView;
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
@@ -34,8 +37,6 @@ public class NowPlayingMovies extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.nowPlaying);
-        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -45,19 +46,19 @@ public class NowPlayingMovies extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.popular:
-                Intent popular = new Intent(getApplicationContext(), PopularMovies.class);
+                Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
                 return true;
             case R.id.topRated:
-                Intent topRated = new Intent(getApplicationContext(), TopRatedMovies.class);
+                Intent topRated = new Intent(getApplicationContext(), TopRatedMoviesActivity.class);
                 startActivity(topRated);
                 return true;
             case R.id.nowPlaying:
-                Intent nowPlaying = new Intent(getApplicationContext(), NowPlayingMovies.class);
+                Intent nowPlaying = new Intent(getApplicationContext(), NowPlayingMoviesActivity.class);
                 startActivity(nowPlaying);
                 return true;
             case R.id.upComing:
-                Intent upComing = new Intent(getApplicationContext(), UpComingMovies.class);
+                Intent upComing = new Intent(getApplicationContext(), UpComingMoviesActivity.class);
                 startActivity(upComing);
                 return true;
             default:
@@ -72,15 +73,15 @@ public class NowPlayingMovies extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        Intent popular = new Intent(getApplicationContext(), PopularMovies.class);
+                        Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                         startActivity(popular);
                         return true;
                     case R.id.favourites:
-                        Intent favourites = new Intent(getApplicationContext(), Favourites.class);
+                        Intent favourites = new Intent(getApplicationContext(), FavouritesMoviesActivity.class);
                         startActivity(favourites);
                         return true;
                     case R.id.search:
-                        Intent search = new Intent(getApplicationContext(), Search.class);
+                        Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
 
@@ -90,25 +91,36 @@ public class NowPlayingMovies extends AppCompatActivity {
         });
     }
 
-    void nowPlaying(){
-       DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute();
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute(query);
+        searchView.clearFocus();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return true;
     }
 
     public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 
         @Override
         protected MovieResultsPage doInBackground(String... strings) {
-            TmdbMovies nowPlaying = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieResultsPage resultNowPlaying = nowPlaying.getNowPlayingMovies(null, null, null);
-            return resultNowPlaying;
+            String text = (strings.length > 0)?strings[0]:null;
+            TmdbSearch search = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getSearch();
+            MovieResultsPage resultSearch = search.searchMovie(text, null, null, true,null);
+            return resultSearch;
         }
 
         @Override
-        protected void onPostExecute(MovieResultsPage resultNowPlaying) {
-            super.onPostExecute(resultNowPlaying);
+        protected void onPostExecute(MovieResultsPage resultSearch) {
+            super.onPostExecute(resultSearch);
 
-            for(MovieDb movieDb : resultNowPlaying){
+            list.clear();
+            for(MovieDb movieDb : resultSearch){
 
                 list.add(movieDb);
             }
@@ -118,25 +130,30 @@ public class NowPlayingMovies extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_now_playing_movies);
+        setContentView(R.layout.activity_search);
 
-        setTitle("Now Playing Movies");
+        setTitle("Search Movies");
+
 
         bottomNavigation();
 
+        searchView = (SearchView) findViewById(R.id.search);
+
+        searchView.setOnQueryTextListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-        nowPlaying();
     }
+
+
 }

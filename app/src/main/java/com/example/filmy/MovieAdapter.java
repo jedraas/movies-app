@@ -2,25 +2,22 @@ package com.example.filmy;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import info.movito.themoviedbapi.model.MovieDb;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder>  {
 
 
 
@@ -62,7 +59,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                 @Override
                 public void onClick(final View v) {
 
-                    Intent intent = new Intent(context, MovieDetail.class);
+                    Intent intent = new Intent(context, MovieDetailActivity.class);
                     intent.putExtra("movieDB", list.get(position));
                     context.startActivity(intent);
                 }

@@ -1,20 +1,11 @@
 package com.example.filmy;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import java.util.ArrayList;
-
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.TmdbSearch;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 
 //tu ma byc logowanie
@@ -26,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
 public void signUpClicked(View view){
     Button signUpButton = (Button) findViewById(R.id.signUpButton);
-    Intent intent = new Intent(getApplicationContext(), PopularMovies.class);
+    Intent intent = new Intent(getApplicationContext(), PopularMoviesActivity.class);
     startActivity(intent);
 }
 

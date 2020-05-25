@@ -6,26 +6,25 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
+import com.example.filmy.database.Movie;
+import com.example.filmy.database.MovieDao;
+import com.example.filmy.database.MovieDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
-
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbMovies;
+import java.util.List;
 import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
-public class UpComingMovies extends AppCompatActivity {
 
+public class FavouritesMoviesActivity extends AppCompatActivity  {
+
+
+    MovieDao movieDao;
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
@@ -34,8 +33,6 @@ public class UpComingMovies extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.upComing);
-        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -45,19 +42,19 @@ public class UpComingMovies extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.popular:
-                Intent popular = new Intent(getApplicationContext(), PopularMovies.class);
+                Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
                 return true;
             case R.id.topRated:
-                Intent topRated = new Intent(getApplicationContext(), TopRatedMovies.class);
+                Intent topRated = new Intent(getApplicationContext(), TopRatedMoviesActivity.class);
                 startActivity(topRated);
                 return true;
             case R.id.nowPlaying:
-                Intent nowPlaying = new Intent(getApplicationContext(), NowPlayingMovies.class);
+                Intent nowPlaying = new Intent(getApplicationContext(), NowPlayingMoviesActivity.class);
                 startActivity(nowPlaying);
                 return true;
             case R.id.upComing:
-                Intent upComing = new Intent(getApplicationContext(), UpComingMovies.class);
+                Intent upComing = new Intent(getApplicationContext(), UpComingMoviesActivity.class);
                 startActivity(upComing);
                 return true;
             default:
@@ -72,15 +69,15 @@ public class UpComingMovies extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        Intent popular = new Intent(getApplicationContext(), PopularMovies.class);
+                        Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                         startActivity(popular);
                         return true;
                     case R.id.favourites:
-                        Intent favourites = new Intent(getApplicationContext(), Favourites.class);
+                        Intent favourites = new Intent(getApplicationContext(), FavouritesMoviesActivity.class);
                         startActivity(favourites);
                         return true;
                     case R.id.search:
-                        Intent search = new Intent(getApplicationContext(), Search.class);
+                        Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
 
@@ -90,29 +87,23 @@ public class UpComingMovies extends AppCompatActivity {
         });
     }
 
-   void upComing(){
-       DownloadMovie downloadMovie = new DownloadMovie();
-       downloadMovie.execute();
-
-
-   }
-
-    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
+    public class GetMovieFromDatabase extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
-        protected MovieResultsPage doInBackground(String... strings) {
-            TmdbMovies upComing = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieResultsPage resultUpComing = upComing.getUpcoming(null, null, null);
-            return resultUpComing;
+        protected List<Movie> doInBackground(String... strings) {
+            return movieDao.getAll();
         }
 
         @Override
-        protected void onPostExecute(MovieResultsPage resultUpComing) {
-            super.onPostExecute(resultUpComing);
+        protected void onPostExecute(List<Movie> movies) {
+            super.onPostExecute(movies);
 
-            for(MovieDb movieDb : resultUpComing){
+            //clear favourite
+            list.clear();
 
-                list.add(movieDb);
+            for (Movie movie : movies) {
+
+                list.add(movie.movieDB);
             }
 
             movieAdapter.notifyDataSetChanged();
@@ -120,21 +111,31 @@ public class UpComingMovies extends AppCompatActivity {
         }
     }
 
+   public void favourite(){
+
+        GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
+        getMovieFromDatabase.execute();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        favourite();
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_up_coming_movies);
+        setContentView(R.layout.activity_favourites);
 
-        setTitle("Upcoming Movies");
-
+        setTitle("Favourites Movies");
         bottomNavigation();
 
-        upComing();
+        movieDao = MovieDatabase.getMovieDatabase(this).movieDao();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -143,10 +144,5 @@ public class UpComingMovies extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
 
-
-
     }
-
-
-
 }

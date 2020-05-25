@@ -6,12 +6,21 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Search">
+    tools:context=".SearchMoviesActivity">
 
 
     <SearchView
+        android:id="@+id/search"
         android:layout_width="match_parent"
-        android:layout_height="132dp" />
+        android:layout_height="100dp"
+        android:queryHint="Find movie" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        app:layout_constraintTop_toBottomOf="@+id/search" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
