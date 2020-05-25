@@ -11,7 +11,9 @@
         android:theme="@style/AppTheme">
         <!--        <activity android:name=".MainActivity">-->
         <activity android:name=".MovieDetail"></activity>
-        <activity android:name=".Search" />
+        <activity android:name=".Search"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".Favourites" />
         <activity android:name=".NowPlayingMovies" />
         <activity android:name=".TopRatedMovies" />
