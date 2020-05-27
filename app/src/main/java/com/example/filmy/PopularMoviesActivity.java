@@ -37,9 +37,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.popular);
-        item.setVisible(false);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -48,10 +45,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         switch(item.getItemId()){
-            case R.id.popular:
-                Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
-                startActivity(popular);
-                return true;
             case R.id.topRated:
                 Intent topRated = new Intent(getApplicationContext(), TopRatedMoviesActivity.class);
                 startActivity(topRated);

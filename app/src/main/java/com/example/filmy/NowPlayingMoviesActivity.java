@@ -43,10 +43,6 @@ public class NowPlayingMoviesActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         switch(item.getItemId()){
-            case R.id.popular:
-                Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
-                startActivity(popular);
-                return true;
             case R.id.topRated:
                 Intent topRated = new Intent(getApplicationContext(), TopRatedMoviesActivity.class);
                 startActivity(topRated);
