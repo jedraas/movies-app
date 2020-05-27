@@ -25,6 +25,10 @@ import info.movito.themoviedbapi.TmdbSearch;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
+/**
+ * aktywnosc pozwalajaca na wyszukiwanie filmow
+ */
+
 public class SearchMoviesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
 
@@ -61,6 +65,10 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
                 return false;
         }
     }
+
+    /**
+     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     */
 
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -100,6 +108,11 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
     public boolean onQueryTextChange(String newText) {
         return true;
     }
+
+
+    /**
+     * pobieranie filmow z internetu
+     */
 
     public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 

@@ -23,6 +23,10 @@ import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
+/**
+ * aktywnosc wyswietlajaca nadchodzace filmy
+ */
+
 public class UpComingMoviesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -60,6 +64,10 @@ public class UpComingMoviesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     */
+
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -85,10 +93,18 @@ public class UpComingMoviesActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * pobieranie nadchodzących filmow z bazy danych i wyswietlanie ich jako karty
+     */
+
    public void upComing(){
        DownloadMovie downloadMovie = new DownloadMovie();
        downloadMovie.execute();
    }
+
+    /**
+     * pobieranie filmow z internetu i dodanie ich do listy
+     */
 
     public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 

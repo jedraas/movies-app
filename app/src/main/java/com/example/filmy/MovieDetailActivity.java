@@ -42,6 +42,10 @@ import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
 
 
+/**
+ * aktywnosc wyswietlajaca szczegoly filmu
+ */
+
 public class MovieDetailActivity extends AppCompatActivity {
 
     Video trailer;
@@ -86,7 +90,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     };
 
 
-//button watchTrailer
+    /**
+     * uruchomienie trailera na Youtube
+     * @param view
+     */
     public void watchTrailer(View view){
 
         String url = "https://www.youtube.com/watch?v=" + trailer.getKey();
@@ -94,7 +101,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         startActivity(browserIntent);
     }
 
-    //button add/remove favourite
+    /**
+     * sprawdzenie czy film jest dodany do ulubionych
+     * @param view
+     */
     public void favouriteButtonClicked(View view){
         if(isFavourite()){
             removeFromFavourites();
@@ -102,6 +112,10 @@ public class MovieDetailActivity extends AppCompatActivity {
             addToFavourites();
         }
     }
+
+    /**
+     * dodanie filmu do ulubionych
+     */
 
     public void addToFavourites(){
         Movie movie = new Movie();
@@ -123,10 +137,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * usuniecie filmu z ulubionych
+     */
     public void removeFromFavourites(){
         movieDao.deleteByID(movieDB.getId());
         updateFavouriteButton(false);
     }
+
+    /**
+     * aktualizowanie tekstu przycisku dodawania do ulubionych
+     * @param favourite
+     */
 
     public void updateFavouriteButton(boolean favourite){
         if(favourite){
@@ -136,7 +158,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
-//Detail (genres, runtime)
+    /**
+     * pobieranie szczegolow dotyczacych filmow z internetu i dodanie ich do listy
+     */
     public class DownloadMovieDetail extends AsyncTask<Integer, Void, MovieDb> {
 
         @Override
@@ -165,7 +189,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
- //Trailer
+    /**
+     * pobieranie trailera z internetu i dodanie go do listy
+     */
     public class DownloadMovie extends AsyncTask<Integer, Void, List<Video>> {
 
         @Override
@@ -194,7 +220,10 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
-    //Cast
+    /**
+     * pobieranie aktorow z internetu i dodanie ich do listy
+     */
+
     public class DownloadCast extends AsyncTask<Integer, Void, Credits> {
 
         @Override
@@ -220,6 +249,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * pobieranie szczegolow o filmie z bazy danych i wyswietlanie ich
+     */
+
     public void download() {
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute(movieDB.getId());
@@ -239,7 +272,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
-    //shake off out of activity moviedetail
+    /**
+     * wylaczenie dzialania potrzasania poza obecna aktywnoscia
+     */
     @Override
     protected void onPause() {
         mSensorManager.unregisterListener(mSensorListener);

@@ -62,6 +62,9 @@ public class PopularMoviesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     */
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

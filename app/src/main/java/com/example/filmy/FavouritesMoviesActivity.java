@@ -21,6 +21,9 @@ import java.util.List;
 import info.movito.themoviedbapi.model.MovieDb;
 
 
+/**
+ * aktywnosc wyswietlajaca nasze ulubione filmy
+ */
 public class FavouritesMoviesActivity extends AppCompatActivity  {
 
 
@@ -58,6 +61,9 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         }
     }
 
+    /**
+     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     */
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -83,6 +89,9 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         });
     }
 
+    /**
+     * pobieranie filmow
+     */
     public class GetMovieFromDatabase extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
@@ -107,6 +116,9 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         }
     }
 
+    /**
+     * pobieranie ulubionych filmow z bazy danych i wyswietlanie ich jako karty
+     */
    public void favourite(){
 
         GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
