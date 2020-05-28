@@ -27,7 +27,7 @@ import info.movito.themoviedbapi.model.core.MovieResultsPage;
  * aktywnosc wyswietlajaca nadchodzace filmy
  */
 
-public class UpComingMoviesActivity extends AppCompatActivity {
+public class UpcomingMoviesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
@@ -37,7 +37,7 @@ public class UpComingMoviesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.upComing);
+        MenuItem item = menu.findItem(R.id.upcoming);
         item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
@@ -47,6 +47,10 @@ public class UpComingMoviesActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         switch(item.getItemId()){
+            case R.id.popular:
+                Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
+                startActivity(popular);
+                return true;
             case R.id.topRated:
                 Intent topRated = new Intent(getApplicationContext(), TopRatedMoviesActivity.class);
                 startActivity(topRated);
@@ -55,9 +59,9 @@ public class UpComingMoviesActivity extends AppCompatActivity {
                 Intent nowPlaying = new Intent(getApplicationContext(), NowPlayingMoviesActivity.class);
                 startActivity(nowPlaying);
                 return true;
-            case R.id.upComing:
-                Intent upComing = new Intent(getApplicationContext(), UpComingMoviesActivity.class);
-                startActivity(upComing);
+            case R.id.upcoming:
+                Intent upcoming = new Intent(getApplicationContext(), UpcomingMoviesActivity.class);
+                startActivity(upcoming);
                 return true;
             default:
                 return false;

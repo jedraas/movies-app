@@ -49,6 +49,10 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         super.onOptionsItemSelected(item);
 
         switch(item.getItemId()){
+            case R.id.popular:
+                Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
+                startActivity(popular);
+                return true;
             case R.id.topRated:
                 Intent topRated = new Intent(getApplicationContext(), TopRatedMoviesActivity.class);
                 startActivity(topRated);
@@ -57,9 +61,9 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
                 Intent nowPlaying = new Intent(getApplicationContext(), NowPlayingMoviesActivity.class);
                 startActivity(nowPlaying);
                 return true;
-            case R.id.upComing:
-                Intent upComing = new Intent(getApplicationContext(), UpComingMoviesActivity.class);
-                startActivity(upComing);
+            case R.id.upcoming:
+                Intent upcoming = new Intent(getApplicationContext(), UpcomingMoviesActivity.class);
+                startActivity(upcoming);
                 return true;
             default:
                 return false;

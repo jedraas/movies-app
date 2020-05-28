@@ -24,6 +24,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 /**
  * aktywnosc wyswietlajaca nasze ulubione filmy
  */
+
 public class FavouritesMoviesActivity extends AppCompatActivity  {
 
 
@@ -31,6 +32,12 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
+
+    /**
+     * metoda tworzaca menu wyswietalne w gornym rogu ekranu
+     * @param menu
+     * @return
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,6 +51,10 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         super.onOptionsItemSelected(item);
 
         switch(item.getItemId()){
+            case R.id.popular:
+                Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
+                startActivity(popular);
+                return true;
             case R.id.topRated:
                 Intent topRated = new Intent(getApplicationContext(), TopRatedMoviesActivity.class);
                 startActivity(topRated);
@@ -52,9 +63,9 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
                 Intent nowPlaying = new Intent(getApplicationContext(), NowPlayingMoviesActivity.class);
                 startActivity(nowPlaying);
                 return true;
-            case R.id.upComing:
-                Intent upComing = new Intent(getApplicationContext(), UpComingMoviesActivity.class);
-                startActivity(upComing);
+            case R.id.upcoming:
+                Intent upcoming = new Intent(getApplicationContext(), UpcomingMoviesActivity.class);
+                startActivity(upcoming);
                 return true;
             default:
                 return false;
@@ -62,8 +73,9 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     }
 
     /**
-     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     * metoda tworząca dolny pasek menu zawierajacy 3 zakladki (home, search, favourites)
      */
+
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -92,6 +104,7 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     /**
      * pobieranie filmow
      */
+
     public class GetMovieFromDatabase extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
@@ -119,6 +132,7 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     /**
      * pobieranie ulubionych filmow z bazy danych i wyswietlanie ich jako karty
      */
+
    public void favourite(){
 
         GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
