@@ -25,7 +25,7 @@ import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 
 /**
- * Aktywność wyswietlająca najwyżej oceniane filmy
+ * Aktywność wyswietlająca najwyżej oceniane filmy.
  */
 public class TopRatedMoviesActivity extends AppCompatActivity {
 
