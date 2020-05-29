@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 
-//tu ma byc logowanie
+
 
 
 public class MainActivity extends AppCompatActivity {

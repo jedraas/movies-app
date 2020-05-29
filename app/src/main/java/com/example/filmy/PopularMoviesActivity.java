@@ -25,7 +25,7 @@ import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 
 /**
- * aktywnosc wyswietlajaca popularne filmy
+ * Aktywność wyświetlająca popularne filmy.
  */
 public class PopularMoviesActivity extends AppCompatActivity {
 
@@ -69,7 +69,7 @@ public class PopularMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     * Wyświetla menu znajdujące się w dolnej części ekranu, które zawiera odnośniki do innych aktywności.
      */
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -89,7 +89,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
                         Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
-
                 }
                 return false;
             }
@@ -97,17 +96,15 @@ public class PopularMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * pobieranie popularnych filmow z bazy danych i wyswietlanie ich jako karty
+     * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
      */
     public void popular(){
-
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute();
-
     }
 
     /**
-     * pobieranie filmow z internetu i dodanie ich do listy
+     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage>{
 
@@ -123,15 +120,11 @@ public class PopularMoviesActivity extends AppCompatActivity {
            super.onPostExecute(resultPopular);
 
            for(MovieDb movieDb : resultPopular){
-
                list.add(movieDb);
            }
-
            movieAdapter.notifyDataSetChanged();
-
        }
    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,11 +133,9 @@ public class PopularMoviesActivity extends AppCompatActivity {
 
         setTitle("Popular Movies");
 
-
         bottomNavigation();
 
         popular();
-
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
@@ -153,9 +144,5 @@ public class PopularMoviesActivity extends AppCompatActivity {
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
     }
-
-
-
 }

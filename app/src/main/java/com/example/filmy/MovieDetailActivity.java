@@ -43,9 +43,8 @@ import info.movito.themoviedbapi.model.people.PersonCast;
 
 
 /**
- * aktywnosc wyswietlajaca szczegoly filmu
+ * Aktywność wyświetlająca szczegóły filmu.
  */
-
 public class MovieDetailActivity extends AppCompatActivity {
 
     Video trailer;
@@ -61,15 +60,17 @@ public class MovieDetailActivity extends AppCompatActivity {
     MovieDao movieDao;
     ArrayList<PersonCast> cast = new ArrayList();
 
-
+    // https://stackoverflow.com/questions/2317428/how-to-refresh-app-upon-shaking-the-device
     //shake device to add/remove favourite
     private SensorManager mSensorManager;
     private float mAccel; // acceleration apart from gravity
     private float mAccelCurrent; // current acceleration including gravity
     private float mAccelLast; // last acceleration including gravity
 
+    /**
+     * Listener, który po wykryciu wstrząśniecia dodaje lub usuwa film z ulubionych.
+     */
     private final SensorEventListener mSensorListener = new SensorEventListener() {
-
         public void onSensorChanged(SensorEvent se) {
             float x = se.values[0];
             float y = se.values[1];
@@ -84,26 +85,23 @@ public class MovieDetailActivity extends AppCompatActivity {
                 MovieDetailActivity.this.favouriteButtonClicked(null);
             }
         }
-
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
 
-
     /**
-     * uruchomienie trailera na Youtube
-     * @param view
+     * Uruchamia trailer filmu w YouTube.
+     * @param view widok który wywołał metodę.
      */
     public void watchTrailer(View view){
-
         String url = "https://www.youtube.com/watch?v=" + trailer.getKey();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
     }
 
     /**
-     * sprawdzenie czy film jest dodany do ulubionych
-     * @param view
+     * Dodaje lub usuwa film z ulubionych.
+     * @param view widok który wywołał metodę.
      */
     public void favouriteButtonClicked(View view){
         if(isFavourite()){
@@ -114,19 +112,20 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * dodanie filmu do ulubionych
+     * Dodaje aktualny film do bazy danych ulubionych filmów oraz aktualizuje działanie przycisku, który teraz służy do usuwania z ulubionych.
      */
-
     public void addToFavourites(){
         Movie movie = new Movie();
         movie.movieDB = movieDB;
-        movie.title = movieDB.getTitle();
         movie.movieID = movieDB.getId();
-        movie.poster = movieDB.getPosterPath();
         movieDao.insertAll(movie);
         updateFavouriteButton(true);
     }
 
+    /**
+     * Sprawdza czy aktualny film jest na liście ulubionych.
+     * @return true jeżeli film jest ulubiony, w przeciwnym przypadku false.
+     */
     public boolean isFavourite() {
         List<Movie> favourites = movieDao.getMoviesByID(movieDB.getId());
 
@@ -138,7 +137,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * usuniecie filmu z ulubionych
+     * Usuwa bieżący film z bazy ulubionych filmów.
      */
     public void removeFromFavourites(){
         movieDao.deleteByID(movieDB.getId());
@@ -146,10 +145,9 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * aktualizowanie tekstu przycisku dodawania do ulubionych
-     * @param favourite
+     * Aktualizuje tekst przycisku dodawania do/usuwania z ulubionych.
+     * @param favourite czy film jest aktualnie ulubiony.
      */
-
     public void updateFavouriteButton(boolean favourite){
         if(favourite){
             favouritesButton.setText("Remove from favourites");
@@ -159,7 +157,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * pobieranie szczegolow dotyczacych filmow z internetu i dodanie ich do listy
+     * Pobiera szczegóły dotyczące filmu z themoviedb API i uaktualnia interfejs.
      */
     public class DownloadMovieDetail extends AsyncTask<Integer, Void, MovieDb> {
 
@@ -169,28 +167,23 @@ public class MovieDetailActivity extends AppCompatActivity {
             TmdbMovies detail = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
             MovieDb resultDetail =  detail.getMovie(movieID, null);
             return resultDetail;
-
         }
         @Override
         protected void onPostExecute(MovieDb resultDetail) {
             super.onPostExecute(resultDetail);
 
             for(Genre genre : resultDetail.getGenres()){
-
                 Chip chip = (Chip) LayoutInflater.from(MovieDetailActivity.this).inflate(R.layout.genres_chip, MovieDetailActivity.this.genres, false);
                 chip.setText(genre.getName());
                 MovieDetailActivity.this.genres.addView(chip);
                 String runtime = "<b>Time: </b>" + Integer.toString(resultDetail.getRuntime()) + " min";
                 textRuntime.setText(HtmlCompat.fromHtml(runtime, HtmlCompat.FROM_HTML_MODE_LEGACY));
-
                 }
-
         }
-
     }
 
     /**
-     * pobieranie trailera z internetu i dodanie go do listy
+     * Pobiera link do trailera z themoviedb API i konfiguruje przycisk do oglądania.
      */
     public class DownloadMovie extends AsyncTask<Integer, Void, List<Video>> {
 
@@ -200,30 +193,25 @@ public class MovieDetailActivity extends AppCompatActivity {
             TmdbMovies video = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
             List<Video> resultVideo =  video.getVideos(movieID, null);
             return resultVideo;
-
         }
         @Override
         protected void onPostExecute(List<Video> resultVideo) {
             super.onPostExecute(resultVideo);
 
             for (Video video: resultVideo) {
-
+                //Zabezpieczenie przed przypadkiem gdy video.getType == null
                 if("Trailer".equals(video.getType())){
                     MovieDetailActivity.this.trailer = video;
                     MovieDetailActivity.this.trailerButton.setVisibility(View.VISIBLE);
                     break;
                 }
-
             }
-
         }
-
     }
 
     /**
-     * pobieranie aktorow z internetu i dodanie ich do listy
+     * Pobiera listę aktorów z themoviedb API i zapisuje je w obiekcie o nazwie cast.
      */
-
     public class DownloadCast extends AsyncTask<Integer, Void, Credits> {
 
         @Override
@@ -232,8 +220,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             TmdbMovies credit = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
             Credits resultCredits =  credit.getCredits(movieID);
             return resultCredits;
-
-
         }
 
         @Override
@@ -241,18 +227,15 @@ public class MovieDetailActivity extends AppCompatActivity {
             super.onPostExecute(resultCredits);
 
             for(PersonCast personCast : resultCredits.getCast()){
-
                 cast.add(personCast);
             }
            castAdapter.notifyDataSetChanged();
-
         }
     }
 
     /**
-     * pobieranie szczegolow o filmie z bazy danych i wyswietlanie ich
+     * Pobiera szczegóły dotyczące filmu z bazy danych.
      */
-
     public void download() {
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute(movieDB.getId());
@@ -264,16 +247,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         downloadMovieDetail.execute(movieDB.getId());
     }
 
+    /**
+     * Włącza działanie użycia akcelerometra podczas podtrząsania urządzeniem, gdy obecna aktywność jest widoczna.
+     */
     @Override
     protected void onResume() {
         super.onResume();
 
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-
     }
 
     /**
-     * wylaczenie dzialania potrzasania poza obecna aktywnoscia
+     * Wyłącza działanie użycia akcelerometra podczas podtrząsania urządzeniem, gdy obecna aktywność jest niewidoczna.
      */
     @Override
     protected void onPause() {
@@ -321,7 +306,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         //title
         textTitle.setText(movieDB.getTitle());
 
-
         //overview
         textOverview.setText(movieDB.getOverview());
 
@@ -337,7 +321,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         //date
         textDate.setText(movieDB.getReleaseDate());
 
-
         //rv cast
         rvCast = (RecyclerView) findViewById(R.id.rvCast);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false);
@@ -347,14 +330,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         rvCast.setAdapter(castAdapter);
         rvCast.addItemDecoration(new DividerItemDecoration(rvCast.getContext(), DividerItemDecoration.VERTICAL));
 
-
         //shake device sensor
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
-
-
     }
 }

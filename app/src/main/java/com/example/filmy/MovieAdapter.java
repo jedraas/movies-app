@@ -17,63 +17,55 @@ import java.util.ArrayList;
 
 import info.movito.themoviedbapi.model.MovieDb;
 
+/**
+ * Adapter służący do wyświetlenia listy filmów w formie listy RecyclerView.
+ */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder>  {
 
+    Context context;
+    ArrayList<MovieDb> list;
 
+    public class MyViewHolder extends RecyclerView.ViewHolder{
+        public TextView title;
+        public ImageView imageView;
 
-        Context context;
-        ArrayList<MovieDb> list;
+        public MyViewHolder(View view) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.title);
+            imageView = (ImageView) view.findViewById(R.id.image);
+        }
+    }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder{
+    public MovieAdapter(Context context, ArrayList<MovieDb> list) {
+        this.context = context;
+        this.list = list;
+    }
 
-            public TextView title;
-            public ImageView imageView;
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_card, viewGroup, false);
+        return new MyViewHolder(itemView);
+    }
 
-
-            public MyViewHolder(View view) {
-                super(view);
-                title = (TextView) view.findViewById(R.id.title);
-                imageView = (ImageView) view.findViewById(R.id.image);
-
-
+    @Override
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
+        myViewHolder.title.setText(list.get(i).getTitle());
+        String path = "https://image.tmdb.org/t/p/w200" + list.get(i).getPosterPath();
+        Picasso.get().load(path).into(myViewHolder.imageView);
+        final int position = myViewHolder.getAdapterPosition();
+        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Intent intent = new Intent(context, MovieDetailActivity.class);
+                intent.putExtra("movieDB", list.get(position));
+                context.startActivity(intent);
             }
-
-        }
-        public MovieAdapter(Context context, ArrayList<MovieDb> list) {
-            this.context = context;
-            this.list = list;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
-            View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_card, viewGroup, false);
-            return new MyViewHolder(itemView);
-        }
-        @Override
-        public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
-            myViewHolder.title.setText(list.get(i).getTitle());
-            String path = "https://image.tmdb.org/t/p/w200" + list.get(i).getPosterPath();
-            Picasso.get().load(path).into(myViewHolder.imageView);
-            final int position = myViewHolder.getAdapterPosition();
-            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
-
-                    Intent intent = new Intent(context, MovieDetailActivity.class);
-                    intent.putExtra("movieDB", list.get(position));
-                    context.startActivity(intent);
-                }
-            });
-
-
-
-        }
+        });
+    }
         @Override
         public int getItemCount() {
             return list.size();
         }
-
-
-    }
+}
 
 

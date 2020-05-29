@@ -11,7 +11,16 @@ import java.io.ObjectOutputStream;
 
 import info.movito.themoviedbapi.model.MovieDb;
 
+/**
+ * Klasa serializująca obiekt typu MovieDb z typu String i do typu String
+ */
 public class Converters {
+
+    /**
+     * Zdeserializuj obiekt value do typu MovieDb
+     * @param value obiekt, który zostaje zdeserializowany
+     * @return zdeserializowany obiekt
+     */
     @TypeConverter
     public static MovieDb fromString(String value) {
 
@@ -21,15 +30,18 @@ public class Converters {
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
             movieDb = (MovieDb)si.readObject();
-
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
         return movieDb;
-
     }
+
+    /**
+     * Zserializuj obiekt movieDb do typu String
+     * @param movieDb obiekt, który zostaje zserializowany
+     * @return zserializowany obiekt
+     */
     @TypeConverter
     public static String fromMovieDb(MovieDb movieDb) {
 

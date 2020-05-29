@@ -26,11 +26,9 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 /**
- * aktywnosc pozwalajaca na wyszukiwanie filmow
+ * Aktywność pozwalająca na wyszukiwanie filmów.
  */
-
 public class SearchMoviesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-
 
     SearchView searchView;
     RecyclerView recyclerView;
@@ -71,9 +69,8 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
     }
 
     /**
-     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     * Wyświetla menu znajdujące się w dolnej części ekranu, które zawiera odnośniki do innych aktywności.
      */
-
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -101,7 +98,6 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute(query);
         searchView.clearFocus();
@@ -113,11 +109,9 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         return true;
     }
 
-
     /**
-     * pobieranie filmow z internetu
+     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-
     public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 
         @Override
@@ -134,16 +128,11 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
 
             list.clear();
             for(MovieDb movieDb : resultSearch){
-
                 list.add(movieDb);
             }
-
             movieAdapter.notifyDataSetChanged();
-
         }
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +140,6 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         setContentView(R.layout.activity_search);
 
         setTitle("Search Movies");
-
 
         bottomNavigation();
 
@@ -167,6 +155,4 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         recyclerView.setAdapter(movieAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
-
-
 }

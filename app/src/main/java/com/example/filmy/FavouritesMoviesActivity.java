@@ -22,22 +22,14 @@ import info.movito.themoviedbapi.model.MovieDb;
 
 
 /**
- * aktywnosc wyswietlajaca nasze ulubione filmy
+ * Aktywność wyświetlająca ulubione filmy.
  */
-
 public class FavouritesMoviesActivity extends AppCompatActivity  {
-
 
     MovieDao movieDao;
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
-
-    /**
-     * metoda tworzaca menu wyswietalne w gornym rogu ekranu
-     * @param menu
-     * @return
-     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,9 +65,8 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     }
 
     /**
-     * metoda tworząca dolny pasek menu zawierajacy 3 zakladki (home, search, favourites)
+     * Wyświetla menu znajdujące się w dolnej części ekranu, które zawiera odnośniki do innych aktywności.
      */
-
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -94,7 +85,6 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
                         Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
-
                 }
                 return false;
             }
@@ -102,9 +92,8 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     }
 
     /**
-     * pobieranie filmow
+     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-
     public class GetMovieFromDatabase extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
@@ -120,32 +109,28 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
             list.clear();
 
             for (Movie movie : movies) {
-
                 list.add(movie.movieDB);
             }
-
             movieAdapter.notifyDataSetChanged();
-
         }
     }
 
     /**
-     * pobieranie ulubionych filmow z bazy danych i wyswietlanie ich jako karty
+     * Pobiera ulubione filmy z bazy danych i wyświetla je jako karty.
      */
-
    public void favourite(){
-
         GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
         getMovieFromDatabase.execute();
-
     }
 
+    /**
+     * Po wznowieniu aktywności odświeża listę ulubionych.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         favourite();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +149,5 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-
     }
 }

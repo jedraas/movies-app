@@ -25,15 +25,13 @@ import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 
 /**
- * aktywnosc wyswietlajaca najwyzej oceniane filmy
+ * Aktywność wyswietlająca najwyżej oceniane filmy
  */
-
 public class TopRatedMoviesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,9 +69,8 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     * Wyświetla menu znajdujące się w dolnej części ekranu, które zawiera odnośniki do innych aktywności.
      */
-
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -92,7 +89,6 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
                         Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
-
                 }
                 return false;
             }
@@ -100,19 +96,16 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * pobieranie najwyżej ocenianych filmow z bazy danych i wyswietlanie ich jako karty
+     * Pobiera najwyżej oceniane filmy z bazy danych i wyświetla je jako karty.
      */
-
    public void topRated(){
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute();
-
     }
 
     /**
-     * pobieranie filmow z internetu i dodanie ich do listy
+     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-
     public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 
         @Override
@@ -127,12 +120,9 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
             super.onPostExecute(resultTopRated);
 
             for(MovieDb movieDb : resultTopRated){
-
                 list.add(movieDb);
             }
-
             movieAdapter.notifyDataSetChanged();
-
         }
     }
 
@@ -154,7 +144,5 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-
     }
 }

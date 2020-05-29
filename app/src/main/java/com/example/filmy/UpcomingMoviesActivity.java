@@ -24,9 +24,8 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 /**
- * aktywnosc wyswietlajaca nadchodzace filmy
+ * Aktywność wyswietlająca nadchodzące filmy.
  */
-
 public class UpcomingMoviesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -69,9 +68,8 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * wyswietlanie dolnego paska menu zawierajacego 3 zakladki (home, search, favourites)
+     * Wyświetla menu znajdujące się w dolnej części ekranu, które zawiera odnośniki do innych aktywności.
      */
-
     public void bottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -90,7 +88,6 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
                         Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
-
                 }
                 return false;
             }
@@ -98,18 +95,16 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * pobieranie nadchodzących filmow z bazy danych i wyswietlanie ich jako karty
+     * Pobiera nadchodzące filmy z bazy danych i wyświetla je jako karty.
      */
-
    public void upComing(){
        DownloadMovie downloadMovie = new DownloadMovie();
        downloadMovie.execute();
    }
 
     /**
-     * pobieranie filmow z internetu i dodanie ich do listy
+     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-
     public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 
         @Override
@@ -124,16 +119,11 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
             super.onPostExecute(resultUpComing);
 
             for(MovieDb movieDb : resultUpComing){
-
                 list.add(movieDb);
             }
-
             movieAdapter.notifyDataSetChanged();
-
         }
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,11 +143,5 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-
-
     }
-
-
-
 }
