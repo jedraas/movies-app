@@ -59,6 +59,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     ChipGroup genres;
     MovieDao movieDao;
     ArrayList<PersonCast> cast = new ArrayList();
+    Credits credits;
 
     // https://stackoverflow.com/questions/2317428/how-to-refresh-app-upon-shaking-the-device
     //shake device to add/remove favourite
@@ -116,6 +117,7 @@ public class MovieDetailActivity extends AppCompatActivity {
      */
     public void addToFavourites(){
         Movie movie = new Movie();
+        movieDB.setCredits(credits);
         movie.movieDB = movieDB;
         movie.movieID = movieDB.getId();
         movieDao.insertAll(movie);
@@ -214,6 +216,8 @@ public class MovieDetailActivity extends AppCompatActivity {
      */
     public class DownloadCast extends AsyncTask<Integer, Void, Credits> {
 
+
+
         @Override
         protected Credits doInBackground(Integer... strings) {
             Integer movieID = strings[0];
@@ -226,6 +230,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         protected void onPostExecute(Credits resultCredits) {
             super.onPostExecute(resultCredits);
 
+            credits = resultCredits;
             for(PersonCast personCast : resultCredits.getCast()){
                 cast.add(personCast);
             }

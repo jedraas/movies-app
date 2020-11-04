@@ -62,6 +62,10 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
                 Intent upcoming = new Intent(getApplicationContext(), UpcomingMoviesActivity.class);
                 startActivity(upcoming);
                 return true;
+            case R.id.recommended:
+                Intent recommended = new Intent(getApplicationContext(), RecommendedMoviesActivity.class);
+                startActivity(recommended);
+                return true;
             default:
                 return false;
         }
