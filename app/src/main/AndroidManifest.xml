@@ -17,6 +17,8 @@
         <activity android:name=".NowPlayingMoviesActivity" />
         <activity android:name=".TopRatedMoviesActivity" />
         <activity android:name=".UpcomingMoviesActivity" />
+        <activity android:name=".RecommendedMoviesActivity" />
+
 
         <activity android:name=".PopularMoviesActivity" >
             <intent-filter>

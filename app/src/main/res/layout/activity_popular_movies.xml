@@ -9,12 +9,29 @@
     android:layout_height="match_parent"
     tools:context=".PopularMoviesActivity">
 
+    <HorizontalScrollView
+        android:id="@+id/hscroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        >
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/genres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        app:layout_constraintStart_toEndOf="@+id/hscroll"/>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
