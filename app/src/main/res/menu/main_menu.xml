@@ -5,6 +5,7 @@
     <item android:title="Top Rated" android:id="@+id/topRated"></item>
     <item android:title="Now Playing" android:id="@+id/nowPlaying"></item>
     <item android:title="Upcoming" android:id="@+id/upcoming"></item>
+    <item android:title="Recommended" android:id="@+id/recommended"></item>
 
 
 
