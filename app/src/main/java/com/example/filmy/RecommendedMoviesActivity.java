@@ -21,7 +21,6 @@ import com.example.filmy.database.MovieDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -33,15 +32,13 @@ import java.util.Map;
 import java.util.Set;
 
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbDiscover;
 import info.movito.themoviedbapi.TmdbFind;
 import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.model.Discover;
 import info.movito.themoviedbapi.model.FindResults;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
-import info.movito.themoviedbapi.model.people.Person;
 import info.movito.themoviedbapi.model.people.PersonCast;
+
 
 /**
  * Aktywność wyświetlająca rekomendowane filmy.
@@ -122,50 +119,7 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
         /**
          * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
          */
-//        public class GetMovieFromDatabase extends AsyncTask<Integer, Void, List<Movie>> {
-//
-//            @Override
-//            protected List<Movie> doInBackground(Integer... movie) {
-//                movieDao.getAll();
-//                Integer movieID = movie[0];
-//                TmdbMovies recommended = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-//                MovieResultsPage resultRecommended = recommended.getRecommendedMovies(movieID, null, null);
-//                return resultRecommended;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(List<Movie> movies) {
-//                super.onPostExecute(movies);
-//
-//                //clear favourite
-//                list.clear();
-//
-//                for (Movie movie : movies) {
-//                    list.add(movie.movieDB);
-//                }
-//                movieAdapter.notifyDataSetChanged();
-//            }
-//        }
-
-
-
-        /**
-         * Pobiera ulubione filmy z bazy danych i wyświetla je jako karty.
-         */
-//        public void favourite(){
-//            GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
-//            getMovieFromDatabase.execute();
-//        }
-
-        /**
-         * Po wznowieniu aktywności odświeża listę ulubionych.
-         */
-//        @Override
-//        protected void onResume() {
-//            super.onResume();
-//            favourite();
-//        }
-        public class DownloadMovie extends AsyncTask<Void, Void, ArrayList<MovieDb>>{
+        public class DownloadMovieRecommended extends AsyncTask<Void, Void, ArrayList<MovieDb>>{
 
             // function to sort hashmap by values
             public  HashMap<PersonCast, Integer> sortByValue(HashMap<PersonCast, Integer> hm)
@@ -176,15 +130,15 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
 
                 // Sort the list
                 Collections.sort(list, new Comparator<Map.Entry<PersonCast, Integer> >() {
-                    public int compare(Map.Entry<PersonCast, Integer> o1,
-                                       Map.Entry<PersonCast, Integer> o2)
+                    public int compare(Map.Entry<PersonCast, Integer> cast1,
+                                       Map.Entry<PersonCast, Integer> cast2)
                     {
-                        return (o2.getValue()).compareTo(o1.getValue());
+                        return (cast2.getValue()).compareTo(cast1.getValue());
                     }
                 });
 
                 // put data from sorted list to hashmap
-                HashMap<PersonCast, Integer> temp = new LinkedHashMap<PersonCast, Integer>();
+                HashMap<PersonCast, Integer> temp = new LinkedHashMap<>();
                 for (Map.Entry<PersonCast, Integer> aa : list) {
                     temp.put(aa.getKey(), aa.getValue());
                 }
@@ -195,24 +149,44 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
             @Override
             protected ArrayList<MovieDb> doInBackground(Void... ignore) {
                List<Movie> favourites = movieDao.getAll();
-                ArrayList<MovieDb> list = new ArrayList<>();
-                if (favourites.isEmpty()
-                ) {
-                    //todo getTopRated.
-                    return list;
+               ArrayList<MovieDb> list = new ArrayList<>();
+
+                /**
+                 * Pobiera filmy najwyżej oceniane i wyświetla je jako karty, jeżeli użytkownik nie posiada filmów ulubionych.
+                 */
+                if (favourites.isEmpty()) {
+                        TmdbMovies topRated = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+                        MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, null);
+                        for(MovieDb movieDb : resultTopRated){
+                            list.add(movieDb);
+                        }
                 }
                 HashMap<PersonCast, Integer> castByNumber = new HashMap<> ();
-                for(Movie favourite : favourites) {
-                   int movieID = favourite.movieID;
-                   TmdbMovies recommendedMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-                   MovieResultsPage resultRecommended = recommendedMovies.getRecommendedMovies(movieID, null, null);
-                   int i = 0;
-                   for(MovieDb recommendedMovie : resultRecommended){
-                       i++;
-                       if(i > 3) break;
-                       list.add(recommendedMovie);
 
-                   }
+                /**
+                 * Pobiera filmy ulubione z bazy danych, pobiera dla nich 3 filmy rekomendowane i zapisuje w obiekcie list.
+                 */
+                for(Movie favourite : favourites) {
+                    int movieID = favourite.movieID;
+                    TmdbMovies recommendedMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+                    MovieResultsPage resultRecommended = recommendedMovies.getRecommendedMovies(movieID, null, null);
+                    TmdbMovies similarMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+                    MovieResultsPage resultSimilarMovie = similarMovies.getSimilarMovies(movieID, null, null);
+                    int i = 0;
+                    for (MovieDb recommendedMovie : resultRecommended) {
+                        i++;
+                        if (i > 2) break;
+                        list.add(recommendedMovie);
+                    }
+
+                    int j = 0;
+                    for (MovieDb similarMovie : resultSimilarMovie) {
+                        j++;
+                        if (j > 2) break;
+                        list.add(similarMovie);
+                    }
+
+
                    try {
                        for (PersonCast personCast : favourite.movieDB.getCast()) {
                            Integer cast = castByNumber.get(personCast);
@@ -220,7 +194,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                            cast++;
                            castByNumber.put(personCast, cast);
                        }
-
 
                    }
                    catch(NullPointerException e){};
@@ -247,7 +220,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                         j++;
                         if(j > 3) break;
                         list.add(popularMovie);
-
                     }
                 }
 
@@ -260,18 +232,18 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                 list.clear();
                 list.addAll(set);
 
-                //get SImilarMovies()
+
+                // Sortowanie po ocenie filmu
                 Collections.sort(list, new Comparator<MovieDb>() {
                     @Override
-                    public int compare(MovieDb o1, MovieDb o2) {
+                    public int compare(MovieDb movie1, MovieDb movie2) {
                         // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                        return o1.getVoteAverage() > o2.getVoteAverage() ? -1 : (o1.getVoteAverage() < o2.getVoteAverage()) ? 1 : 0;
+                        return movie1.getVoteAverage() > movie2.getVoteAverage() ? -1 : (movie1.getVoteAverage() < movie2.getVoteAverage()) ? 1 : 0;
                     }
                 });
 
-               return list;
-
-              }
+                    return list;
+                }
 
 
             @Override
@@ -280,16 +252,21 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
 
                 for(MovieDb movieDb : resultRecommended){
                     list.add(movieDb);
+
                 }
                 movieAdapter.notifyDataSetChanged();
             }
         }
 
-    public void download(){
-
-        DownloadMovie downloadMovieDetail = new DownloadMovie();
-        downloadMovieDetail.execute();
+    /**
+     * Pobiera rekomendowane filmy z bazy danych i wyświetla je jako karty.
+     */
+    public void downloadRecommended(){
+        DownloadMovieRecommended downloadMovieRecommended = new DownloadMovieRecommended();
+        downloadMovieRecommended.execute();
     }
+
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -308,8 +285,8 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
             recyclerView.setAdapter(movieAdapter);
             recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-            //recommended();
-            download();
+            downloadRecommended();
+
         }
     }
 
