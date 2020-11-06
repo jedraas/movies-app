@@ -2,7 +2,7 @@ package com.example.filmy;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.ListView;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -64,12 +64,11 @@ public class GenresActivity extends AppCompatActivity {
         genres = new ArrayList<>();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         genreAdapter = new GenresAdapter(this, genres);
         recyclerView.setAdapter(genreAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
         genre();
     }
