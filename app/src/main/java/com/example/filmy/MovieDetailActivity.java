@@ -333,7 +333,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         rvCast.setItemAnimator(new DefaultItemAnimator());
         castAdapter = new CastAdapter(this, cast);
         rvCast.setAdapter(castAdapter);
-        rvCast.addItemDecoration(new DividerItemDecoration(rvCast.getContext(), DividerItemDecoration.VERTICAL));
 
         //shake device sensor
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

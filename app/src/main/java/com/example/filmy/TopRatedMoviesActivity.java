@@ -150,6 +150,5 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 }

@@ -63,6 +63,9 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
                 Intent recommended = new Intent(getApplicationContext(), RecommendedMoviesActivity.class);
                 startActivity(recommended);
                 return true;
+            case R.id.genres:
+                Intent action = new Intent(getApplicationContext(), GenresActivity.class);
+                startActivity(action);
             default:
                 return false;
         }
@@ -152,6 +155,5 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 }
