@@ -14,7 +14,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="false"
         android:orientation="vertical">
 
         <ImageView
@@ -22,7 +21,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/home"
             app:layout_constraintDimensionRatio="w,3:2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +31,6 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:gravity="center"
-            android:text="Title"
             android:textAppearance="@android:style/TextAppearance.Material.Notification.Title"
             android:textColor="?android:attr/panelColorForeground"
             app:layout_constraintBottom_toBottomOf="parent"
