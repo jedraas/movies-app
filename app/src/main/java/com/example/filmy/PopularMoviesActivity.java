@@ -41,8 +41,7 @@ public class PopularMoviesActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
-    MovieDb movieDB;
-    ChipGroup genres;
+
 
 
    /* void test(){
@@ -51,6 +50,21 @@ public class PopularMoviesActivity extends AppCompatActivity {
         Log.i("Now playing movies: ", "" + resultVideo);
     }
     */
+/*   void test(){
+
+       TmdbMovies similar = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+       MovieResultsPage resultSimilarMovie = similar.getSimilarMovies(475557, null, null);
+       Log.i("Similar movies: ", "" + resultSimilarMovie.getResults());
+
+   }
+
+    void test2(){
+
+        TmdbMovies rekom = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+        MovieResultsPage resultReko = rekom.getRecommendedMovies(475557, null, null);
+        Log.i("Rekom  movies: ", "" + resultReko.getResults());
+
+    }*/
 
    /* void test(){
         TmdbMovies nowPlaying = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
@@ -66,11 +80,17 @@ public class PopularMoviesActivity extends AppCompatActivity {
     }
 */
 
-  /*  void test(){
+ /*   void test(){
         TmdbGenre video = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
         MovieResultsPage resultVideo =  video.getGenreMovies(12, null, null, true);
+        Log.i("Now playing movies: ", "" + resultVideo.getResults());
+    }*/
+  /*  void test(){
+        TmdbGenre genre = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
+        List<Genre> resultVideo =  genre.getGenreList(null);
         Log.i("Now playing movies: ", "" + resultVideo);
     }*/
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,6 +126,9 @@ public class PopularMoviesActivity extends AppCompatActivity {
                 Intent recommended = new Intent(getApplicationContext(), RecommendedMoviesActivity.class);
                 startActivity(recommended);
                 return true;
+            case R.id.genres:
+                Intent action = new Intent(getApplicationContext(), GenresActivity.class);
+                startActivity(action);
             default:
                 return false;
         }
@@ -138,25 +161,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
-     */
-    public void popular(){
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute();
-
-    }
-/*
-
-    public void download(){
-
-        DownloadMovieDetail downloadMovieDetail = new DownloadMovieDetail();
-        downloadMovieDetail.execute();
-    }
-*/
-
-
-
 
     /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
@@ -179,28 +183,19 @@ public class PopularMoviesActivity extends AppCompatActivity {
            }
            movieAdapter.notifyDataSetChanged();
        }
-   }
 
-   /* public class DownloadMovieDetail extends AsyncTask<String, Void, MovieResultsPage> {
+    }
 
-        @Override
-        protected MovieResultsPage doInBackground(String... strings) {
-            TmdbGenre video = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
-            MovieResultsPage resultDetail =  video.getGenreMovies(12, null, null, true);
-            return resultDetail;
-        }
-        @Override
-        protected void onPostExecute(MovieResultsPage resultDetail) {
-            super.onPostExecute(resultDetail);
 
-            for(MovieDb movieDb : resultDetail){
-                Chip chip = (Chip) LayoutInflater.from(PopularMoviesActivity.this).inflate(R.layout.genres_chip, PopularMoviesActivity.this.genres, false);
+    /**
+     * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
+     */
+    public void popular(){
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute();
+    }
 
-                PopularMoviesActivity.this.genres.addView(chip);
 
-            }
-        }
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,18 +217,14 @@ public class PopularMoviesActivity extends AppCompatActivity {
                     test();
 
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        thread.start();
-*/
+        thread.start();*/
 
-
-        genres = (ChipGroup) findViewById(R.id.genres);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
@@ -244,6 +235,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
         popular();
-       //download();
+
     }
 }

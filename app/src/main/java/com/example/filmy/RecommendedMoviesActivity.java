@@ -84,6 +84,9 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                     Intent recommended = new Intent(getApplicationContext(), RecommendedMoviesActivity.class);
                     startActivity(recommended);
                     return true;
+                case R.id.genres:
+                    Intent action = new Intent(getApplicationContext(), GenresActivity.class);
+                    startActivity(action);
                 default:
                     return false;
             }
@@ -210,6 +213,10 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                     if(perCast.getValue() > 1)
                     popularCast.add(perCast.getKey());
                 }
+
+                // todo getCrew (np. jezeli widzialam 2 filmy jakiegos rezysera to to polec inny film tego samego rezysera)
+                // todo constrainty w xml
+                // todo getgenres (np. jezeli sa 3 filmy w ulubionych o gatunku kryminalnym to polec kryminalne)
 
 
                 if(popularCast.size() > 0)

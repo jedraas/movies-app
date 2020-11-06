@@ -67,6 +67,9 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
                 Intent recommended = new Intent(getApplicationContext(), RecommendedMoviesActivity.class);
                 startActivity(recommended);
                 return true;
+            case R.id.genres:
+                Intent action = new Intent(getApplicationContext(), GenresActivity.class);
+                startActivity(action);
             default:
                 return false;
         }

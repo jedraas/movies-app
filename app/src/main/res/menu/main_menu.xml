@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Popular" android:id="@+id/popular"></item>
     <item android:title="Top Rated" android:id="@+id/topRated"></item>
     <item android:title="Now Playing" android:id="@+id/nowPlaying"></item>
     <item android:title="Upcoming" android:id="@+id/upcoming"></item>
     <item android:title="Recommended" android:id="@+id/recommended"></item>
-
+    <item android:title="Genres" android:id="@+id/genres"/>
 
 
 </menu>
