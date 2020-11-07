@@ -19,6 +19,8 @@
         <activity android:name=".UpcomingMoviesActivity" />
         <activity android:name=".RecommendedMoviesActivity" />
         <activity android:name=".GenresActivity" />
+        <activity android:name=".GenresDetailActivity" />
+
 
 
 
