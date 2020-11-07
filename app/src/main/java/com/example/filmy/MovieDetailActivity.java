@@ -216,8 +216,6 @@ public class MovieDetailActivity extends AppCompatActivity {
      */
     public class DownloadCast extends AsyncTask<Integer, Void, Credits> {
 
-
-
         @Override
         protected Credits doInBackground(Integer... strings) {
             Integer movieID = strings[0];

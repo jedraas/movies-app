@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import info.movito.themoviedbapi.model.Genre;
-import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
+/**
+ * Adapter służący do wyświetlenia listy gatunków filmów w formie listy RecyclerView.
+ */
 public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.MyViewHolder> {
 
     Context context;
@@ -51,17 +51,17 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.MyViewHold
     public void onBindViewHolder(@NonNull final GenresAdapter.MyViewHolder myViewHolder, int i) {
         Genre genre = genres.get(i);
         myViewHolder.genreName.setText(genre.getName());
-   /*     //String path = "https://image.tmdb.org/t/p/w200" + list.get(i).getPosterPath();
-       // Picasso.get().load(path).into(myViewHolder.imageView);
+        //String path = "@drawable/ic_search_black_24dp";
+        //Picasso.get().load(path).into(myViewHolder.imageView);
         final int position = myViewHolder.getAdapterPosition();
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Intent intent = new Intent(context, MovieDetailActivity.class);
-                intent.putExtra("movieDB", list.get(position));
+                Intent intent = new Intent(context, GenresDetailActivity.class);
+                intent.putExtra("movieDBGenre", genres.get(position));
                 context.startActivity(intent);
             }
-        });*/
+        });
     }
     @Override
     public int getItemCount() {

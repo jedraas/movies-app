@@ -195,14 +195,10 @@ public class PopularMoviesActivity extends AppCompatActivity {
         downloadMovie.execute();
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popular_movies);
-
-
 
         setTitle("Popular Movies");
 
