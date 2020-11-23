@@ -147,7 +147,7 @@ public class GenresDetailActivity extends AppCompatActivity {
 
         genre = (Genre) getIntent().getSerializableExtra("movieDBGenre");
 
-        setTitle("Genre " + genre.getName());
+        setTitle(genre.getName() + " Movies");
 
         bottomNavigation();
 
