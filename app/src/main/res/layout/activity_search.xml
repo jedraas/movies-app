@@ -10,7 +10,7 @@ android:layout_height="match_parent">
     android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:queryHint="Find movie"
+    android:queryHint="Title"
     app:layout_constraintBottom_toTopOf="@+id/recycler"/>
 
 <androidx.recyclerview.widget.RecyclerView
