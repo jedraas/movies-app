@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">filmy</string>
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="watch_trailer">Watch Trailer</string>
+    <string name="release_date">Release Date</string>
+    <string name="overview">Overview</string>
+    <string name="cast">Cast</string>
+    <string name="todo">TODO</string>
 </resources>
