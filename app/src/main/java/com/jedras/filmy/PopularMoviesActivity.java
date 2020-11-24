@@ -1,4 +1,10 @@
-package com.example.filmy;
+package com.jedras.filmy;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -7,37 +13,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbGenre;
-
-import info.movito.themoviedbapi.model.Genre;
+import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
+
 /**
- * Aktywność wyświetlająca filmy danego gatunku.
+ * Aktywność wyświetlająca popularne filmy.
  */
-public class GenresDetailActivity extends AppCompatActivity {
+public class PopularMoviesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
-    Genre genre;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
+        MenuItem item = menu.findItem(R.id.popular);
+        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -101,57 +101,47 @@ public class GenresDetailActivity extends AppCompatActivity {
         });
     }
 
+
     /**
-     * Pobiera filmy danego gatunku z bazy danych i zapisuje je w obiekcie o nazwie list.
+     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-    public class DownloadGenreMovie extends AsyncTask<Integer, Void, ArrayList<MovieDb>> {
+   public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage>{
 
-        @Override
-        protected ArrayList<MovieDb> doInBackground(Integer... strings) {
-            ArrayList<MovieDb> list = new ArrayList<>();
-            int movieID = genre.getId();
-            TmdbGenre genreMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
-            MovieResultsPage resultGenreMovie = genreMovies.getGenreMovies(movieID, null, null, true
-                );
-            for(MovieDb movieDb : resultGenreMovie){
-                    list.add(movieDb);
-            }
+       @Override
+       protected MovieResultsPage doInBackground(String... strings) {
+           TmdbMovies popular = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+           MovieResultsPage resultPopular = popular.getPopularMovies(null, null);
+           return resultPopular;
+       }
 
-            return list;
-        }
+       @Override
+       protected void onPostExecute(MovieResultsPage resultPopular) {
+           super.onPostExecute(resultPopular);
 
-        @Override
-        protected void onPostExecute(ArrayList<MovieDb> resultGenreMovie) {
-            super.onPostExecute(resultGenreMovie);
+           for(MovieDb movieDb : resultPopular){
+               list.add(movieDb);
+           }
+           movieAdapter.notifyDataSetChanged();
+       }
 
-            for(MovieDb movieDb : resultGenreMovie){
-                list.add(movieDb);
-
-            }
-            movieAdapter.notifyDataSetChanged();
-        }
     }
 
     /**
-     * Pobiera filmy danego gatunku z bazy danych i wyświetla je jako karty.
+     * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
      */
-    public void genreMovie(){
-        DownloadGenreMovie downloadMovie = new DownloadGenreMovie();
-        downloadMovie.execute(genre.getId());
+    public void popular(){
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_genres_detail);
+        setContentView(R.layout.activity_popular_movies);
 
-        genre = (Genre) getIntent().getSerializableExtra("movieDBGenre");
-
-        setTitle(genre.getName() + " Movies");
+        setTitle("Popular Movies");
 
         bottomNavigation();
-
-        genreMovie();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
@@ -159,5 +149,8 @@ public class GenresDetailActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
+
+        popular();
+
     }
 }

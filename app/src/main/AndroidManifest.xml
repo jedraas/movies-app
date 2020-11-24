@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.filmy">
+    package="com.jedras.filmy">
 
     <application
         android:allowBackup="true"
@@ -9,22 +9,22 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MovieDetailActivity"></activity>
-        <activity android:name=".SearchMoviesActivity"
+        <activity android:name="com.jedras.filmy.MovieDetailActivity"></activity>
+        <activity android:name="com.jedras.filmy.SearchMoviesActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".FavouritesMoviesActivity" />
-        <activity android:name=".NowPlayingMoviesActivity" />
-        <activity android:name=".TopRatedMoviesActivity" />
-        <activity android:name=".UpcomingMoviesActivity" />
-        <activity android:name=".RecommendedMoviesActivity" />
-        <activity android:name=".GenresActivity" />
-        <activity android:name=".GenresDetailActivity" />
+        <activity android:name="com.jedras.filmy.FavouritesMoviesActivity" />
+        <activity android:name="com.jedras.filmy.NowPlayingMoviesActivity" />
+        <activity android:name="com.jedras.filmy.TopRatedMoviesActivity" />
+        <activity android:name="com.jedras.filmy.UpcomingMoviesActivity" />
+        <activity android:name="com.jedras.filmy.RecommendedMoviesActivity" />
+        <activity android:name="com.jedras.filmy.GenresActivity" />
+        <activity android:name="com.jedras.filmy.GenresDetailActivity" />
 
 
 
 
-        <activity android:name=".PopularMoviesActivity" >
+        <activity android:name="com.jedras.filmy.PopularMoviesActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

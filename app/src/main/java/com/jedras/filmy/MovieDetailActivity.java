@@ -1,4 +1,4 @@
-package com.example.filmy;
+package com.jedras.filmy;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
@@ -22,9 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.filmy.database.Movie;
-import com.example.filmy.database.MovieDao;
-import com.example.filmy.database.MovieDatabase;
+import com.jedras.filmy.database.Movie;
+import com.jedras.filmy.database.MovieDao;
+import com.jedras.filmy.database.MovieDatabase;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;

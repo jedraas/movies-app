@@ -1,46 +1,32 @@
-package com.example.filmy;
+package com.jedras.filmy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbGenre;
-import info.movito.themoviedbapi.TmdbJobs;
 import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.TmdbPeople;
-import info.movito.themoviedbapi.model.Credits;
-import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
-import info.movito.themoviedbapi.model.people.PersonCrew;
 
 
 /**
- * Aktywność wyświetlająca popularne filmy.
+ * Aktywność wyswietlająca najwyżej oceniane filmy.
  */
-public class PopularMoviesActivity extends AppCompatActivity {
+public class TopRatedMoviesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
@@ -50,7 +36,7 @@ public class PopularMoviesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.popular);
+        MenuItem item = menu.findItem(R.id.topRated);
         item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
@@ -115,47 +101,47 @@ public class PopularMoviesActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Pobiera najwyżej oceniane filmy z bazy danych i wyświetla je jako karty.
+     */
+   public void topRated(){
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute();
+    }
 
     /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-   public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage>{
+    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 
-       @Override
-       protected MovieResultsPage doInBackground(String... strings) {
-           TmdbMovies popular = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-           MovieResultsPage resultPopular = popular.getPopularMovies(null, null);
-           return resultPopular;
-       }
+        @Override
+        protected MovieResultsPage doInBackground(String... strings) {
+            TmdbMovies topRated = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+            MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, null);
+            return resultTopRated;
+        }
 
-       @Override
-       protected void onPostExecute(MovieResultsPage resultPopular) {
-           super.onPostExecute(resultPopular);
+        @Override
+        protected void onPostExecute(MovieResultsPage resultTopRated) {
+            super.onPostExecute(resultTopRated);
 
-           for(MovieDb movieDb : resultPopular){
-               list.add(movieDb);
-           }
-           movieAdapter.notifyDataSetChanged();
-       }
-
-    }
-
-    /**
-     * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
-     */
-    public void popular(){
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute();
+            for(MovieDb movieDb : resultTopRated){
+                list.add(movieDb);
+            }
+            movieAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_popular_movies);
+        setContentView(R.layout.activity_top_rated_movies);
 
-        setTitle("Popular Movies");
+        setTitle("Top Rated Movies");
 
         bottomNavigation();
+
+        topRated();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
@@ -163,8 +149,5 @@ public class PopularMoviesActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
-
-        popular();
-
     }
 }

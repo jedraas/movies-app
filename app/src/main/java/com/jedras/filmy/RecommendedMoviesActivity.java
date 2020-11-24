@@ -1,4 +1,4 @@
-package com.example.filmy;
+package com.jedras.filmy;
 
 
 import android.content.Intent;
@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.filmy.database.Movie;
-import com.example.filmy.database.MovieDao;
-import com.example.filmy.database.MovieDatabase;
+import com.jedras.filmy.database.Movie;
+import com.jedras.filmy.database.MovieDao;
+import com.jedras.filmy.database.MovieDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                             startActivity(popular);
                             return true;
                         case R.id.favourites:
-                            Intent favourites = new Intent(getApplicationContext(), com.example.filmy.FavouritesMoviesActivity.class);
+                            Intent favourites = new Intent(getApplicationContext(), com.jedras.filmy.FavouritesMoviesActivity.class);
                             startActivity(favourites);
                             return true;
                         case R.id.search:

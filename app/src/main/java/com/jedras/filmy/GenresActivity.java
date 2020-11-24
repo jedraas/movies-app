@@ -1,13 +1,4 @@
-package com.example.filmy;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.widget.SearchView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.jedras.filmy;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -16,29 +7,37 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-
+import java.util.List;
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbSearch;
-import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
+import info.movito.themoviedbapi.TmdbGenre;
+
+import info.movito.themoviedbapi.model.Genre;
 
 /**
- * Aktywność pozwalająca na wyszukiwanie filmów.
+ * Aktywność wyswietlająca gatunki filmów.
  */
-public class SearchMoviesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class GenresActivity extends AppCompatActivity {
 
-    SearchView searchView;
+    GenresAdapter genreAdapter;
     RecyclerView recyclerView;
-    MovieAdapter movieAdapter;
-    ArrayList<MovieDb> list = new ArrayList<>();
+    List<Genre> genres = new ArrayList<>();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
+        MenuItem item = menu.findItem(R.id.genres);
+        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -96,70 +95,64 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
                         Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
-
                 }
                 return false;
             }
         });
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute(query);
-        searchView.clearFocus();
-        return true;
-    }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return true;
+    /**
+     * Pobiera gatunki filmów z bazy danych i zapisuje je w obiekcie o nazwie genres.
+     */
+    public class DownloadGenre extends AsyncTask<String, Void, List<Genre>> {
+
+        @Override
+        protected List<Genre> doInBackground(String... strings) {
+            TmdbGenre genre = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
+            List<Genre> genresList = genre.getGenreList(null);
+            return genresList;
+        }
+
+        @Override
+        protected void onPostExecute(List<Genre> genresList) {
+            super.onPostExecute(genresList);
+
+            for(Genre genre : genresList){
+
+                GenresActivity.this.genres.add(genre);
+            }
+
+            genreAdapter.notifyDataSetChanged();
+        }
+
     }
 
     /**
-     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
+     * Pobiera gatunki filmów z bazy danych i wyświetla je jako karty.
      */
-    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
-
-        @Override
-        protected MovieResultsPage doInBackground(String... strings) {
-            String text = (strings.length > 0)?strings[0]:null;
-            TmdbSearch search = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getSearch();
-            MovieResultsPage resultSearch = search.searchMovie(text, null, null, true,null);
-            return resultSearch;
-        }
-
-        @Override
-        protected void onPostExecute(MovieResultsPage resultSearch) {
-            super.onPostExecute(resultSearch);
-
-            list.clear();
-            for(MovieDb movieDb : resultSearch){
-                list.add(movieDb);
-            }
-            movieAdapter.notifyDataSetChanged();
-        }
+    public void genre(){
+        DownloadGenre downloadGenre = new DownloadGenre();
+        downloadGenre.execute();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_genres);
 
-        setTitle("Find Movies");
+        setTitle("Genres");
 
         bottomNavigation();
 
-        searchView = (SearchView) findViewById(R.id.search);
-
-        searchView.setOnQueryTextListener(this);
-
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        movieAdapter = new MovieAdapter(this, list);
-        recyclerView.setAdapter(movieAdapter);
+        genreAdapter = new GenresAdapter(this, genres);
+        recyclerView.setAdapter(genreAdapter);
 
+        genre();
     }
+
 }

@@ -1,34 +1,31 @@
-package com.example.filmy;
+package com.jedras.filmy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
+import com.jedras.filmy.database.Movie;
+import com.jedras.filmy.database.MovieDao;
+import com.jedras.filmy.database.MovieDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
-
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbMovies;
+import java.util.List;
 import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 
 /**
- * Aktywność wyswietlająca najwyżej oceniane filmy.
+ * Aktywność wyświetlająca ulubione filmy.
  */
-public class TopRatedMoviesActivity extends AppCompatActivity {
+public class FavouritesMoviesActivity extends AppCompatActivity  {
 
+    MovieDao movieDao;
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
@@ -37,8 +34,6 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.topRated);
-        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -103,46 +98,55 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * Pobiera najwyżej oceniane filmy z bazy danych i wyświetla je jako karty.
-     */
-   public void topRated(){
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute();
-    }
-
-    /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
+    public class GetMovieFromDatabase extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
-        protected MovieResultsPage doInBackground(String... strings) {
-            TmdbMovies topRated = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, null);
-            return resultTopRated;
+        protected List<Movie> doInBackground(String... strings) {
+            return movieDao.getAll();
         }
 
         @Override
-        protected void onPostExecute(MovieResultsPage resultTopRated) {
-            super.onPostExecute(resultTopRated);
+        protected void onPostExecute(List<Movie> movies) {
+            super.onPostExecute(movies);
 
-            for(MovieDb movieDb : resultTopRated){
-                list.add(movieDb);
+            //clear favourite
+            list.clear();
+
+            for (Movie movie : movies) {
+                list.add(movie.movieDB);
             }
             movieAdapter.notifyDataSetChanged();
         }
     }
 
+    /**
+     * Pobiera ulubione filmy z bazy danych i wyświetla je jako karty.
+     */
+   public void favourite(){
+        GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
+        getMovieFromDatabase.execute();
+    }
+
+    /**
+     * Po wznowieniu aktywności odświeża listę ulubionych.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        favourite();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_top_rated_movies);
+        setContentView(R.layout.activity_favourites);
 
-        setTitle("Top Rated Movies");
-
+        setTitle("Favourite Movies");
         bottomNavigation();
 
-        topRated();
+        movieDao = MovieDatabase.getMovieDatabase(this).movieDao();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);

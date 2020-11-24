@@ -1,4 +1,4 @@
-package com.example.filmy;
+package com.jedras.filmy;
 
 import android.content.Context;
 import android.view.LayoutInflater;

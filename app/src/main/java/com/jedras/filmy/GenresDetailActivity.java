@@ -1,4 +1,4 @@
-package com.example.filmy;
+package com.jedras.filmy;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,34 +10,34 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.List;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbGenre;
 
 import info.movito.themoviedbapi.model.Genre;
+import info.movito.themoviedbapi.model.MovieDb;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 /**
- * Aktywność wyswietlająca gatunki filmów.
+ * Aktywność wyświetlająca filmy danego gatunku.
  */
-public class GenresActivity extends AppCompatActivity {
+public class GenresDetailActivity extends AppCompatActivity {
 
-    GenresAdapter genreAdapter;
     RecyclerView recyclerView;
-    List<Genre> genres = new ArrayList<>();
+    MovieAdapter movieAdapter;
+    ArrayList<MovieDb> list = new ArrayList<>();
+    Genre genre;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.genres);
-        item.setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -101,58 +101,63 @@ public class GenresActivity extends AppCompatActivity {
         });
     }
 
-
     /**
-     * Pobiera gatunki filmów z bazy danych i zapisuje je w obiekcie o nazwie genres.
+     * Pobiera filmy danego gatunku z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-    public class DownloadGenre extends AsyncTask<String, Void, List<Genre>> {
+    public class DownloadGenreMovie extends AsyncTask<Integer, Void, ArrayList<MovieDb>> {
 
         @Override
-        protected List<Genre> doInBackground(String... strings) {
-            TmdbGenre genre = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
-            List<Genre> genresList = genre.getGenreList(null);
-            return genresList;
-        }
-
-        @Override
-        protected void onPostExecute(List<Genre> genresList) {
-            super.onPostExecute(genresList);
-
-            for(Genre genre : genresList){
-
-                GenresActivity.this.genres.add(genre);
+        protected ArrayList<MovieDb> doInBackground(Integer... strings) {
+            ArrayList<MovieDb> list = new ArrayList<>();
+            int movieID = genre.getId();
+            TmdbGenre genreMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
+            MovieResultsPage resultGenreMovie = genreMovies.getGenreMovies(movieID, null, null, true
+                );
+            for(MovieDb movieDb : resultGenreMovie){
+                    list.add(movieDb);
             }
 
-            genreAdapter.notifyDataSetChanged();
+            return list;
         }
 
+        @Override
+        protected void onPostExecute(ArrayList<MovieDb> resultGenreMovie) {
+            super.onPostExecute(resultGenreMovie);
+
+            for(MovieDb movieDb : resultGenreMovie){
+                list.add(movieDb);
+
+            }
+            movieAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
-     * Pobiera gatunki filmów z bazy danych i wyświetla je jako karty.
+     * Pobiera filmy danego gatunku z bazy danych i wyświetla je jako karty.
      */
-    public void genre(){
-        DownloadGenre downloadGenre = new DownloadGenre();
-        downloadGenre.execute();
+    public void genreMovie(){
+        DownloadGenreMovie downloadMovie = new DownloadGenreMovie();
+        downloadMovie.execute(genre.getId());
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_genres);
+        setContentView(R.layout.activity_genres_detail);
 
-        setTitle("Genres");
+        genre = (Genre) getIntent().getSerializableExtra("movieDBGenre");
+
+        setTitle(genre.getName() + " Movies");
 
         bottomNavigation();
 
+        genreMovie();
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        genreAdapter = new GenresAdapter(this, genres);
-        recyclerView.setAdapter(genreAdapter);
-
-        genre();
+        movieAdapter = new MovieAdapter(this, list);
+        recyclerView.setAdapter(movieAdapter);
     }
-
 }

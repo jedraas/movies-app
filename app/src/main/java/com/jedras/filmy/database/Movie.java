@@ -1,4 +1,4 @@
-package com.example.filmy.database;
+package com.jedras.filmy.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

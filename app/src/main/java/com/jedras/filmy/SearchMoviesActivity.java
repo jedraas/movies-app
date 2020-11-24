@@ -1,32 +1,35 @@
-package com.example.filmy;
+package com.jedras.filmy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.widget.SearchView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import com.example.filmy.database.Movie;
-import com.example.filmy.database.MovieDao;
-import com.example.filmy.database.MovieDatabase;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import java.util.ArrayList;
-import java.util.List;
-import info.movito.themoviedbapi.model.MovieDb;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+
+import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbSearch;
+import info.movito.themoviedbapi.model.MovieDb;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
 /**
- * Aktywność wyświetlająca ulubione filmy.
+ * Aktywność pozwalająca na wyszukiwanie filmów.
  */
-public class FavouritesMoviesActivity extends AppCompatActivity  {
+public class SearchMoviesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    MovieDao movieDao;
+    SearchView searchView;
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
@@ -92,62 +95,63 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
                         Intent search = new Intent(getApplicationContext(), SearchMoviesActivity.class);
                         startActivity(search);
                         return true;
+
                 }
                 return false;
             }
         });
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute(query);
+        searchView.clearFocus();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return true;
+    }
+
     /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-    public class GetMovieFromDatabase extends AsyncTask<String, Void, List<Movie>> {
+    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 
         @Override
-        protected List<Movie> doInBackground(String... strings) {
-            return movieDao.getAll();
+        protected MovieResultsPage doInBackground(String... strings) {
+            String text = (strings.length > 0)?strings[0]:null;
+            TmdbSearch search = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getSearch();
+            MovieResultsPage resultSearch = search.searchMovie(text, null, null, true,null);
+            return resultSearch;
         }
 
         @Override
-        protected void onPostExecute(List<Movie> movies) {
-            super.onPostExecute(movies);
+        protected void onPostExecute(MovieResultsPage resultSearch) {
+            super.onPostExecute(resultSearch);
 
-            //clear favourite
             list.clear();
-
-            for (Movie movie : movies) {
-                list.add(movie.movieDB);
+            for(MovieDb movieDb : resultSearch){
+                list.add(movieDb);
             }
             movieAdapter.notifyDataSetChanged();
         }
     }
 
-    /**
-     * Pobiera ulubione filmy z bazy danych i wyświetla je jako karty.
-     */
-   public void favourite(){
-        GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
-        getMovieFromDatabase.execute();
-    }
-
-    /**
-     * Po wznowieniu aktywności odświeża listę ulubionych.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        favourite();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourites);
+        setContentView(R.layout.activity_search);
 
-        setTitle("Favourite Movies");
+        setTitle("Find Movies");
+
         bottomNavigation();
 
-        movieDao = MovieDatabase.getMovieDatabase(this).movieDao();
+        searchView = (SearchView) findViewById(R.id.search);
+
+        searchView.setOnQueryTextListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
@@ -155,5 +159,6 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
+
     }
 }
