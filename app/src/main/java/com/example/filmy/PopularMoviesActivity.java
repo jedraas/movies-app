@@ -26,11 +26,15 @@ import java.util.List;
 
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbGenre;
+import info.movito.themoviedbapi.TmdbJobs;
 import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.TmdbPeople;
+import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
+import info.movito.themoviedbapi.model.people.PersonCrew;
 
 
 /**
@@ -41,56 +45,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
     ArrayList<MovieDb> list = new ArrayList<>();
-
-
-
-   /* void test(){
-        TmdbMovies video = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-        List<Video> resultVideo =  video.getVideos(2, null);
-        Log.i("Now playing movies: ", "" + resultVideo);
-    }
-    */
-/*   void test(){
-
-       TmdbMovies similar = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-       MovieResultsPage resultSimilarMovie = similar.getSimilarMovies(475557, null, null);
-       Log.i("Similar movies: ", "" + resultSimilarMovie.getResults());
-
-   }
-
-    void test2(){
-
-        TmdbMovies rekom = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-        MovieResultsPage resultReko = rekom.getRecommendedMovies(475557, null, null);
-        Log.i("Rekom  movies: ", "" + resultReko.getResults());
-
-    }*/
-
-   /* void test(){
-        TmdbMovies nowPlaying = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-        MovieResultsPage resultNowPlaying = nowPlaying.getNowPlayingMovies(null, null, null);
-        Log.i("Now playing movies: ", "" + resultNowPlaying.getResults());
-    }
-    */
-
-      /*  void test(){
-        TmdbMovies recommended = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-        MovieResultsPage resultRecommended = recommended.getRecommendedMovies(724989, null, null);
-        Log.i("Recommended movies: ", "" + resultRecommended.getResults());
-    }
-*/
-
- /*   void test(){
-        TmdbGenre video = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
-        MovieResultsPage resultVideo =  video.getGenreMovies(12, null, null, true);
-        Log.i("Now playing movies: ", "" + resultVideo.getResults());
-    }*/
-  /*  void test(){
-        TmdbGenre genre = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
-        List<Genre> resultVideo =  genre.getGenreList(null);
-        Log.i("Now playing movies: ", "" + resultVideo);
-    }*/
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -186,7 +140,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
 
     }
 
-
     /**
      * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
      */
@@ -203,24 +156,6 @@ public class PopularMoviesActivity extends AppCompatActivity {
         setTitle("Popular Movies");
 
         bottomNavigation();
-
-     /*  Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try  {
-
-                    test();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();*/
-
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);

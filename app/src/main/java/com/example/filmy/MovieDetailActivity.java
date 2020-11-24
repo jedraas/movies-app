@@ -3,7 +3,6 @@ package com.example.filmy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +39,6 @@ import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
-
 
 /**
  * Aktywność wyświetlająca szczegóły filmu.
@@ -180,6 +178,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 MovieDetailActivity.this.genres.addView(chip);
                 String runtime = "<b>Time: </b>" + Integer.toString(resultDetail.getRuntime()) + " min";
                 textRuntime.setText(HtmlCompat.fromHtml(runtime, HtmlCompat.FROM_HTML_MODE_LEGACY));
+
                 }
         }
     }

@@ -144,7 +144,7 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
 
-        setTitle("Favourites Movies");
+        setTitle("Favourite Movies");
         bottomNavigation();
 
         movieDao = MovieDatabase.getMovieDatabase(this).movieDao();

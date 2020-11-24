@@ -146,7 +146,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        setTitle("Search Movies");
+        setTitle("Find Movies");
 
         bottomNavigation();
 

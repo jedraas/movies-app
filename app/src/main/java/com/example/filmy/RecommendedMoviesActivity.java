@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -120,8 +119,8 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
         }
 
         /**
-         * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
-         */
+        * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
+        */
         public class DownloadMovieRecommended extends AsyncTask<Void, Void, ArrayList<MovieDb>>{
 
             // function to sort hashmap by values
@@ -167,7 +166,7 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                 HashMap<PersonCast, Integer> castByNumber = new HashMap<> ();
 
                 /**
-                 * Pobiera filmy ulubione z bazy danych, pobiera dla nich 3 filmy rekomendowane i zapisuje w obiekcie list.
+                 * Pobiera filmy ulubione z bazy danych, pobiera dla nich 2 filmy rekomendowane oraz 2 filmy podobne i zapisuje w obiekcie list.
                  */
                 for(Movie favourite : favourites) {
                     int movieID = favourite.movieID;
@@ -214,10 +213,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                     popularCast.add(perCast.getKey());
                 }
 
-                // todo getCrew (np. jezeli widzialam 2 filmy jakiegos rezysera to to polec inny film tego samego rezysera)
-                // todo constrainty w xml
-                // todo getgenres (np. jezeli sa 3 filmy w ulubionych o gatunku kryminalnym to polec kryminalne)
-
 
                 if(popularCast.size() > 0)
                 {
@@ -238,7 +233,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
 
                 list.clear();
                 list.addAll(set);
-
 
                 // Sortowanie po ocenie filmu
                 Collections.sort(list, new Comparator<MovieDb>() {
@@ -273,13 +267,13 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
         downloadMovieRecommended.execute();
     }
 
-
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_recommended);
 
             setTitle("Recommended Movies");
+
             bottomNavigation();
 
             movieDao = MovieDatabase.getMovieDatabase(this).movieDao();
