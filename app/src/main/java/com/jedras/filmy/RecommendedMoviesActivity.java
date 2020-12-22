@@ -20,6 +20,8 @@ import com.jedras.filmy.database.MovieDao;
 import com.jedras.filmy.database.MovieDatabase;
 import com.jedras.filmy.recommendations.CollaborativeRecommender;
 import com.jedras.filmy.recommendations.DirectorRecommender;
+import com.jedras.filmy.recommendations.GenreRecommender;
+import com.jedras.filmy.recommendations.LanguageRecommender;
 import com.jedras.filmy.recommendations.PopularCastRecommender;
 
 import java.util.ArrayList;
@@ -145,9 +147,8 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
             list.addAll(new CollaborativeRecommender().getRecommendations(favourites));
             list.addAll(new PopularCastRecommender().getRecommendations(favourites));
             list.addAll(new DirectorRecommender().getRecommendations(favourites));
-
-            // TODO: Po gatunku
-            // TODO: Po jezyku?
+            list.addAll(new GenreRecommender().getRecommendations(favourites));
+            list.addAll(new LanguageRecommender().getRecommendations(favourites));
 
             Set<MovieDb> set = new HashSet<>(list);
             for (Movie favourite : favourites) {

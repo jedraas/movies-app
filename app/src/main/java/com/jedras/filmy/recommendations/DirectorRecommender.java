@@ -13,21 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import info.movito.themoviedbapi.TmdbDiscoverPeople;
+import info.movito.themoviedbapi.TmdbDiscoverAdditions;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCrew;
 
 public class DirectorRecommender extends MovieRecommender {
-        // pobieramy rezysera filmu z get movie credits
-        // discover z tym id
-        // 1 usuwamy duplikaty
-        // 2 sortujemy
-        // 3 pierwsze 2
-    // 1 usuwamy duplikaty
-    // 2 sortujemy
-    // 3 pierwsze 2
-
     public static final int NUMBER_OF_MOST_POPULAR_DIRECTORS = 3;
     public static final int MIN_DIRECTOR_POPULARITY = 2;
     public static final int NUMBER_OF_RECOMMENDED_MOVIES = 3;
@@ -94,7 +85,7 @@ public class DirectorRecommender extends MovieRecommender {
         ArrayList<PersonCrew> popularDirectors = getPopularDirectors(favourites);
 
         ArrayList<MovieDb> list = new ArrayList<>();
-        TmdbDiscoverPeople discoverPeople = new TmdbDiscoverPeople(tmdbApi);
+        TmdbDiscoverAdditions discoverPeople = new TmdbDiscoverAdditions(tmdbApi);
 
         for (PersonCrew director : popularDirectors) {
             String personId = String.valueOf(director.getId());

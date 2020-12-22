@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import info.movito.themoviedbapi.TmdbDiscoverPeople;
+import info.movito.themoviedbapi.TmdbDiscoverAdditions;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCast;
@@ -81,7 +81,7 @@ public class PopularCastRecommender extends MovieRecommender {
 
         ArrayList<PersonCast> popularCast = getPopularCast(favourites);
         ArrayList<MovieDb> list = new ArrayList<>();
-        TmdbDiscoverPeople discoverPeople = new TmdbDiscoverPeople(tmdbApi);
+        TmdbDiscoverAdditions discoverPeople = new TmdbDiscoverAdditions(tmdbApi);
 
         for (PersonCast cast : popularCast) {
             String personId = String.valueOf(cast.getId());
