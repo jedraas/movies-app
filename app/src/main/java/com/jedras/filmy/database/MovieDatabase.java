@@ -21,12 +21,14 @@ public abstract class MovieDatabase extends RoomDatabase {
 
     /**
      * Zwraca interfejs do bazy danych.
+     *
      * @return interfejs do bazy danych.
      */
     public abstract MovieDao movieDao();
 
     /**
      * Statyczna metoda zwracająca Singleton instancji bazy danych lub tworząca go, gdy jeszcze nie istnieje.
+     *
      * @param context kontekst aplikacji.
      * @return Singleton instancji bazy danych.
      */

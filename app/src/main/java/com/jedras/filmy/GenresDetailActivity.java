@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbGenre;
-
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
@@ -45,7 +44,7 @@ public class GenresDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.popular:
                 Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
@@ -112,9 +111,9 @@ public class GenresDetailActivity extends AppCompatActivity {
             int movieID = genre.getId();
             TmdbGenre genreMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
             MovieResultsPage resultGenreMovie = genreMovies.getGenreMovies(movieID, null, null, true
-                );
-            for(MovieDb movieDb : resultGenreMovie){
-                    list.add(movieDb);
+            );
+            for (MovieDb movieDb : resultGenreMovie) {
+                list.add(movieDb);
             }
 
             return list;
@@ -124,7 +123,7 @@ public class GenresDetailActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<MovieDb> resultGenreMovie) {
             super.onPostExecute(resultGenreMovie);
 
-            for(MovieDb movieDb : resultGenreMovie){
+            for (MovieDb movieDb : resultGenreMovie) {
                 list.add(movieDb);
 
             }
@@ -135,7 +134,7 @@ public class GenresDetailActivity extends AppCompatActivity {
     /**
      * Pobiera filmy danego gatunku z bazy danych i wyświetla je jako karty.
      */
-    public void genreMovie(){
+    public void genreMovie() {
         DownloadGenreMovie downloadMovie = new DownloadGenreMovie();
         downloadMovie.execute(genre.getId());
     }

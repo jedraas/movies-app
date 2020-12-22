@@ -1,29 +1,33 @@
 package com.jedras.filmy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.jedras.filmy.database.Movie;
 import com.jedras.filmy.database.MovieDao;
 import com.jedras.filmy.database.MovieDatabase;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import info.movito.themoviedbapi.model.MovieDb;
 
 
 /**
  * Aktywność wyświetlająca ulubione filmy.
  */
-public class FavouritesMoviesActivity extends AppCompatActivity  {
+public class FavouritesMoviesActivity extends AppCompatActivity {
 
     MovieDao movieDao;
     RecyclerView recyclerView;
@@ -41,7 +45,7 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.popular:
                 Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
@@ -124,7 +128,7 @@ public class FavouritesMoviesActivity extends AppCompatActivity  {
     /**
      * Pobiera ulubione filmy z bazy danych i wyświetla je jako karty.
      */
-   public void favourite(){
+    public void favourite() {
         GetMovieFromDatabase getMovieFromDatabase = new GetMovieFromDatabase();
         getMovieFromDatabase.execute();
     }

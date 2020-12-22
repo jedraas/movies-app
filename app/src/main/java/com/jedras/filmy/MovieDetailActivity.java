@@ -1,11 +1,5 @@
 package com.jedras.filmy;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.text.HtmlCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -22,11 +16,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.jedras.filmy.database.Movie;
 import com.jedras.filmy.database.MovieDao;
 import com.jedras.filmy.database.MovieDatabase;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -75,24 +75,26 @@ public class MovieDetailActivity extends AppCompatActivity {
             float y = se.values[1];
             float z = se.values[2];
             mAccelLast = mAccelCurrent;
-            mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+            mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta; // perform low-cut filter
             if (mAccel > 5) {
-                Toast toast = Toast.makeText(getApplicationContext(), MovieDetailActivity.this.isFavourite()?"Remove from favourites" : "Added to favourites.", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getApplicationContext(), MovieDetailActivity.this.isFavourite() ? "Remove from favourites" : "Added to favourites.", Toast.LENGTH_LONG);
                 toast.show();
                 MovieDetailActivity.this.favouriteButtonClicked(null);
             }
         }
+
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
 
     /**
      * Uruchamia trailer filmu w YouTube.
+     *
      * @param view widok który wywołał metodę.
      */
-    public void watchTrailer(View view){
+    public void watchTrailer(View view) {
         String url = "https://www.youtube.com/watch?v=" + trailer.getKey();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
@@ -100,12 +102,13 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     /**
      * Dodaje lub usuwa film z ulubionych.
+     *
      * @param view widok który wywołał metodę.
      */
-    public void favouriteButtonClicked(View view){
-        if(isFavourite()){
+    public void favouriteButtonClicked(View view) {
+        if (isFavourite()) {
             removeFromFavourites();
-        } else{
+        } else {
             addToFavourites();
         }
     }
@@ -113,7 +116,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     /**
      * Dodaje aktualny film do bazy danych ulubionych filmów oraz aktualizuje działanie przycisku, który teraz służy do usuwania z ulubionych.
      */
-    public void addToFavourites(){
+    public void addToFavourites() {
         Movie movie = new Movie();
         movieDB.setCredits(credits);
         movie.movieDB = movieDB;
@@ -124,32 +127,30 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     /**
      * Sprawdza czy aktualny film jest na liście ulubionych.
+     *
      * @return true jeżeli film jest ulubiony, w przeciwnym przypadku false.
      */
     public boolean isFavourite() {
         List<Movie> favourites = movieDao.getMoviesByID(movieDB.getId());
 
-        if(favourites.isEmpty()){
-            return false;
-        } else {
-            return true;
-        }
+        return !favourites.isEmpty();
     }
 
     /**
      * Usuwa bieżący film z bazy ulubionych filmów.
      */
-    public void removeFromFavourites(){
+    public void removeFromFavourites() {
         movieDao.deleteByID(movieDB.getId());
         updateFavouriteButton(false);
     }
 
     /**
      * Aktualizuje tekst przycisku dodawania do/usuwania z ulubionych.
+     *
      * @param favourite czy film jest aktualnie ulubiony.
      */
-    public void updateFavouriteButton(boolean favourite){
-        if(favourite){
+    public void updateFavouriteButton(boolean favourite) {
+        if (favourite) {
             favouritesButton.setText("Remove from favourites");
         } else {
             favouritesButton.setText("Add to favourites");
@@ -165,21 +166,22 @@ public class MovieDetailActivity extends AppCompatActivity {
         protected MovieDb doInBackground(Integer... strings) {
             Integer movieID = strings[0];
             TmdbMovies detail = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieDb resultDetail =  detail.getMovie(movieID, null);
+            MovieDb resultDetail = detail.getMovie(movieID, null);
             return resultDetail;
         }
+
         @Override
         protected void onPostExecute(MovieDb resultDetail) {
             super.onPostExecute(resultDetail);
 
-            for(Genre genre : resultDetail.getGenres()){
+            for (Genre genre : resultDetail.getGenres()) {
                 Chip chip = (Chip) LayoutInflater.from(MovieDetailActivity.this).inflate(R.layout.genres_chip, MovieDetailActivity.this.genres, false);
                 chip.setText(genre.getName());
                 MovieDetailActivity.this.genres.addView(chip);
-                String runtime = "<b>Time: </b>" + Integer.toString(resultDetail.getRuntime()) + " min";
+                String runtime = "<b>Time: </b>" + resultDetail.getRuntime() + " min";
                 textRuntime.setText(HtmlCompat.fromHtml(runtime, HtmlCompat.FROM_HTML_MODE_LEGACY));
 
-                }
+            }
         }
     }
 
@@ -192,16 +194,17 @@ public class MovieDetailActivity extends AppCompatActivity {
         protected List<Video> doInBackground(Integer... strings) {
             Integer movieID = strings[0];
             TmdbMovies video = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            List<Video> resultVideo =  video.getVideos(movieID, null);
+            List<Video> resultVideo = video.getVideos(movieID, null);
             return resultVideo;
         }
+
         @Override
         protected void onPostExecute(List<Video> resultVideo) {
             super.onPostExecute(resultVideo);
 
-            for (Video video: resultVideo) {
+            for (Video video : resultVideo) {
                 //Zabezpieczenie przed przypadkiem gdy video.getType == null
-                if("Trailer".equals(video.getType())){
+                if ("Trailer".equals(video.getType())) {
                     MovieDetailActivity.this.trailer = video;
                     MovieDetailActivity.this.trailerButton.setVisibility(View.VISIBLE);
                     break;
@@ -219,7 +222,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         protected Credits doInBackground(Integer... strings) {
             Integer movieID = strings[0];
             TmdbMovies credit = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            Credits resultCredits =  credit.getCredits(movieID);
+            Credits resultCredits = credit.getCredits(movieID);
             return resultCredits;
         }
 
@@ -228,10 +231,10 @@ public class MovieDetailActivity extends AppCompatActivity {
             super.onPostExecute(resultCredits);
 
             credits = resultCredits;
-            for(PersonCast personCast : resultCredits.getCast()){
+            for (PersonCast personCast : resultCredits.getCast()) {
                 cast.add(personCast);
             }
-           castAdapter.notifyDataSetChanged();
+            castAdapter.notifyDataSetChanged();
         }
     }
 
@@ -315,7 +318,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         textLanguage.setText(movieDB.getOriginalLanguage());
 
         //vote
-        textVote.setText(Float.toString(movieDB.getVoteAverage()) + "/10");
+        textVote.setText(movieDB.getVoteAverage() + "/10");
 
         //totalvote
         textTotalVote.setText(Integer.toString(movieDB.getVoteCount()));
@@ -325,7 +328,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         //rv cast
         rvCast = (RecyclerView) findViewById(R.id.rvCast);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL,false);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rvCast.setLayoutManager(mLayoutManager);
         rvCast.setItemAnimator(new DefaultItemAnimator());
         castAdapter = new CastAdapter(this, cast);

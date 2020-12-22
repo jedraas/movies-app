@@ -15,13 +15,14 @@ public class CollaborativeRecommender extends MovieRecommender {
 
     /**
      * Dla każdego ulubionego filmu, pobera 2 filmy rekomendowane oraz 2 filmy podobne.
+     *
      * @return
      */
     @Override
     public ArrayList<MovieDb> getRecommendations(List<Movie> favourites) {
         ArrayList<MovieDb> list = new ArrayList<>();
 
-        for(Movie favourite : favourites) {
+        for (Movie favourite : favourites) {
             int movieID = favourite.movieID;
             TmdbMovies recommendedMovies = tmdbApi.getMovies();
             MovieResultsPage resultRecommended = recommendedMovies.getRecommendedMovies(movieID, null, null);

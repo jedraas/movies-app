@@ -24,17 +24,15 @@ public class PopularCastRecommender extends MovieRecommender {
     public static final int NUMBER_OF_RECOMMENDED_MOVIES = 3;
 
     // function to sort hashmap by values
-    public  HashMap<PersonCast, Integer> sortByValue(HashMap<PersonCast, Integer> hm)
-    {
+    public HashMap<PersonCast, Integer> sortByValue(HashMap<PersonCast, Integer> hm) {
         // Create a list from elements of HashMap
-        List<Map.Entry<PersonCast, Integer> > list =
+        List<Map.Entry<PersonCast, Integer>> list =
                 new LinkedList<>(hm.entrySet());
 
         // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<PersonCast, Integer> >() {
+        Collections.sort(list, new Comparator<Map.Entry<PersonCast, Integer>>() {
             public int compare(Map.Entry<PersonCast, Integer> cast1,
-                               Map.Entry<PersonCast, Integer> cast2)
-            {
+                               Map.Entry<PersonCast, Integer> cast2) {
                 return (cast2.getValue()).compareTo(cast1.getValue());
             }
         });
@@ -59,7 +57,8 @@ public class PopularCastRecommender extends MovieRecommender {
                     cast++;
                     castByNumber.put(personCast, cast);
                 }
-            } catch (NullPointerException e) { }
+            } catch (NullPointerException e) {
+            }
         }
         HashMap<PersonCast, Integer> sortedCastByNumber = sortByValue(castByNumber);
 
@@ -76,6 +75,7 @@ public class PopularCastRecommender extends MovieRecommender {
 
         return popularCast;
     }
+
     @Override
     public ArrayList<MovieDb> getRecommendations(List<Movie> favourites) {
 
@@ -88,12 +88,12 @@ public class PopularCastRecommender extends MovieRecommender {
             MovieResultsPage discoverWithPeople = discoverPeople.getDiscoverWithPeople(personId);
 
             Set<MovieDb> favouritesSet = new HashSet<MovieDb>();
-            for(Movie favourite : favourites){
+            for (Movie favourite : favourites) {
                 favouritesSet.add(favourite.movieDB);
             }
 
             int j = 0;
-            for(MovieDb popularMovie : discoverWithPeople.getResults()) {
+            for (MovieDb popularMovie : discoverWithPeople.getResults()) {
                 if (favouritesSet.contains(popularMovie)) {
                     // nie dodawaj filmów, które już są ulubione
                     continue;

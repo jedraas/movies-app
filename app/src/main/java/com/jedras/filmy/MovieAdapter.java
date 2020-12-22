@@ -20,12 +20,12 @@ import info.movito.themoviedbapi.model.MovieDb;
 /**
  * Adapter służący do wyświetlenia listy filmów w formie listy RecyclerView.
  */
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder>  {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<MovieDb> list;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public ImageView imageView;
 
@@ -62,10 +62,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             }
         });
     }
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
 }
 
 

@@ -1,17 +1,17 @@
 package com.jedras.filmy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -45,7 +45,7 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.popular:
                 Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
@@ -104,7 +104,7 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
     /**
      * Pobiera najwyżej oceniane filmy z bazy danych i wyświetla je jako karty.
      */
-   public void topRated(){
+    public void topRated() {
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute();
     }
@@ -125,7 +125,7 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
         protected void onPostExecute(MovieResultsPage resultTopRated) {
             super.onPostExecute(resultTopRated);
 
-            for(MovieDb movieDb : resultTopRated){
+            for (MovieDb movieDb : resultTopRated) {
                 list.add(movieDb);
             }
             movieAdapter.notifyDataSetChanged();

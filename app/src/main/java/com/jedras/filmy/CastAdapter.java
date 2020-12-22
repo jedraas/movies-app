@@ -6,20 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
+
 import info.movito.themoviedbapi.model.people.PersonCast;
 
 /**
  * Adapter służący do wyświetlenia listy aktorów w formie listy RecyclerView.
  */
-public class CastAdapter extends RecyclerView.Adapter<CastAdapter.MyViewHolder>{
+public class CastAdapter extends RecyclerView.Adapter<CastAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<PersonCast> list;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textCast;
         public ImageView imageCast;
 

@@ -1,17 +1,17 @@
 package com.jedras.filmy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -45,7 +45,7 @@ public class PopularMoviesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.popular:
                 Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
@@ -105,31 +105,31 @@ public class PopularMoviesActivity extends AppCompatActivity {
     /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-   public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage>{
+    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
 
-       @Override
-       protected MovieResultsPage doInBackground(String... strings) {
-           TmdbMovies popular = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-           MovieResultsPage resultPopular = popular.getPopularMovies(null, null);
-           return resultPopular;
-       }
+        @Override
+        protected MovieResultsPage doInBackground(String... strings) {
+            TmdbMovies popular = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+            MovieResultsPage resultPopular = popular.getPopularMovies(null, null);
+            return resultPopular;
+        }
 
-       @Override
-       protected void onPostExecute(MovieResultsPage resultPopular) {
-           super.onPostExecute(resultPopular);
+        @Override
+        protected void onPostExecute(MovieResultsPage resultPopular) {
+            super.onPostExecute(resultPopular);
 
-           for(MovieDb movieDb : resultPopular){
-               list.add(movieDb);
-           }
-           movieAdapter.notifyDataSetChanged();
-       }
+            for (MovieDb movieDb : resultPopular) {
+                list.add(movieDb);
+            }
+            movieAdapter.notifyDataSetChanged();
+        }
 
     }
 
     /**
      * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
      */
-    public void popular(){
+    public void popular() {
         DownloadMovie downloadMovie = new DownloadMovie();
         downloadMovie.execute();
     }

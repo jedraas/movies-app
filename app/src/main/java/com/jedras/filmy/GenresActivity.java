@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +17,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbGenre;
-
 import info.movito.themoviedbapi.model.Genre;
 
 /**
@@ -45,7 +44,7 @@ public class GenresActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.popular:
                 Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
@@ -118,7 +117,7 @@ public class GenresActivity extends AppCompatActivity {
         protected void onPostExecute(List<Genre> genresList) {
             super.onPostExecute(genresList);
 
-            for(Genre genre : genresList){
+            for (Genre genre : genresList) {
 
                 GenresActivity.this.genres.add(genre);
             }
@@ -131,7 +130,7 @@ public class GenresActivity extends AppCompatActivity {
     /**
      * Pobiera gatunki filmów z bazy danych i wyświetla je jako karty.
      */
-    public void genre(){
+    public void genre() {
         DownloadGenre downloadGenre = new DownloadGenre();
         downloadGenre.execute();
     }

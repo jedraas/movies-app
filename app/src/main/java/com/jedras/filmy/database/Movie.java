@@ -9,7 +9,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 /**
  * Encja reprezentująca film, który jest zapisany w tabeli movies.
  */
-@Entity (tableName = "movies")
+@Entity(tableName = "movies")
 public class Movie {
 
     /**

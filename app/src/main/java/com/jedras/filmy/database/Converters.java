@@ -18,6 +18,7 @@ public class Converters {
 
     /**
      * Zdeserializuj obiekt value do typu MovieDb.
+     *
      * @param value obiekt, który zostaje zdeserializowany.
      * @return zdeserializowany obiekt.
      */
@@ -26,12 +27,11 @@ public class Converters {
 
         MovieDb movieDb = null;
         try {
-            byte b[] = Base64.decode(value.getBytes(), Base64.DEFAULT);
+            byte[] b = Base64.decode(value.getBytes(), Base64.DEFAULT);
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
-            movieDb = (MovieDb)si.readObject();
-        }
-        catch (Exception e) {
+            movieDb = (MovieDb) si.readObject();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return movieDb;
@@ -39,6 +39,7 @@ public class Converters {
 
     /**
      * Zserializuj obiekt movieDb do typu String.
+     *
      * @param movieDb obiekt, który zostaje zserializowany.
      * @return zserializowany obiekt.
      */
@@ -52,8 +53,7 @@ public class Converters {
             so.writeObject(movieDb);
             so.flush();
             value = new String(Base64.encode(bo.toByteArray(), Base64.DEFAULT));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return value;

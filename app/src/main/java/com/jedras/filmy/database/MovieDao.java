@@ -14,6 +14,7 @@ public interface MovieDao {
 
     /**
      * Pobierz wszystkie ulubione filmy z bazy.
+     *
      * @return lista obiektów typu Movie.
      */
     @Query("SELECT * FROM movies")
@@ -21,6 +22,7 @@ public interface MovieDao {
 
     /**
      * Pobierz ulubione filmy z bazy danych po ID.
+     *
      * @param movieID identyfikator filmu.
      * @return lista obiektów typu Movie.
      */
@@ -29,6 +31,7 @@ public interface MovieDao {
 
     /**
      * Usuń ulubione filmy z bazy danych.
+     *
      * @param movieID identyfikator filmu.
      */
     @Query("DELETE FROM movies WHERE movieID = :movieID")
@@ -36,6 +39,7 @@ public interface MovieDao {
 
     /**
      * Dodaj film do ulubionych.
+     *
      * @param movies tablica filmów do dodania do bazy.
      */
     @Insert

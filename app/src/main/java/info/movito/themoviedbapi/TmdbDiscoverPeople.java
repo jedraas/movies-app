@@ -1,6 +1,5 @@
 package info.movito.themoviedbapi;
 
-import info.movito.themoviedbapi.model.Discover;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.tools.ApiUrl;
 

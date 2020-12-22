@@ -17,7 +17,6 @@ import info.movito.themoviedbapi.TmdbDiscoverPeople;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCrew;
-import info.movito.themoviedbapi.model.people.PersonCrew;
 
 public class DirectorRecommender extends MovieRecommender {
         // pobieramy rezysera filmu z get movie credits
@@ -25,23 +24,24 @@ public class DirectorRecommender extends MovieRecommender {
         // 1 usuwamy duplikaty
         // 2 sortujemy
         // 3 pierwsze 2
+    // 1 usuwamy duplikaty
+    // 2 sortujemy
+    // 3 pierwsze 2
 
     public static final int NUMBER_OF_MOST_POPULAR_DIRECTORS = 3;
     public static final int MIN_DIRECTOR_POPULARITY = 2;
     public static final int NUMBER_OF_RECOMMENDED_MOVIES = 3;
 
     // function to sort hashmap by values
-    public HashMap<PersonCrew, Integer> sortByValue(HashMap<PersonCrew, Integer> hm)
-    {
+    public HashMap<PersonCrew, Integer> sortByValue(HashMap<PersonCrew, Integer> hm) {
         // Create a list from elements of HashMap
-        List<Map.Entry<PersonCrew, Integer> > list =
+        List<Map.Entry<PersonCrew, Integer>> list =
                 new LinkedList<>(hm.entrySet());
 
         // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<PersonCrew, Integer> >() {
+        Collections.sort(list, new Comparator<Map.Entry<PersonCrew, Integer>>() {
             public int compare(Map.Entry<PersonCrew, Integer> cast1,
-                               Map.Entry<PersonCrew, Integer> cast2)
-            {
+                               Map.Entry<PersonCrew, Integer> cast2) {
                 return (cast2.getValue()).compareTo(cast1.getValue());
             }
         });
@@ -70,7 +70,8 @@ public class DirectorRecommender extends MovieRecommender {
                     directorsByCount.put(personCrew, crew);
                 }
 
-            } catch (NullPointerException e) { }
+            } catch (NullPointerException e) {
+            }
         }
         HashMap<PersonCrew, Integer> sortedDirectorsByCount = sortByValue(directorsByCount);
 
@@ -101,12 +102,12 @@ public class DirectorRecommender extends MovieRecommender {
 
             // Tworzę zbiór z ulubionymi, by w czasie O(1) sprawdzać czy film rekomendowany już jest w ulubionych
             Set<MovieDb> favouritesSet = new HashSet<>();
-            for(Movie favourite : favourites){
+            for (Movie favourite : favourites) {
                 favouritesSet.add(favourite.movieDB);
             }
 
             int j = 0;
-            for(MovieDb popularMovie : discoverWithPeople.getResults()) {
+            for (MovieDb popularMovie : discoverWithPeople.getResults()) {
                 if (favouritesSet.contains(popularMovie)) {
                     // nie dodawaj filmów, które już są ulubione
                     continue;

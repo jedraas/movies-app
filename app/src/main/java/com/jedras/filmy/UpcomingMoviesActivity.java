@@ -1,17 +1,17 @@
 package com.jedras.filmy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -44,7 +44,7 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.popular:
                 Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
@@ -103,10 +103,10 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
     /**
      * Pobiera nadchodzące filmy z bazy danych i wyświetla je jako karty.
      */
-   public void upComing(){
-       DownloadMovie downloadMovie = new DownloadMovie();
-       downloadMovie.execute();
-   }
+    public void upComing() {
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute();
+    }
 
     /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
@@ -124,7 +124,7 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
         protected void onPostExecute(MovieResultsPage resultUpComing) {
             super.onPostExecute(resultUpComing);
 
-            for(MovieDb movieDb : resultUpComing){
+            for (MovieDb movieDb : resultUpComing) {
                 list.add(movieDb);
             }
             movieAdapter.notifyDataSetChanged();

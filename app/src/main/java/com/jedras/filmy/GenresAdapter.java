@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
-
 import java.util.List;
 
 import info.movito.themoviedbapi.model.Genre;
@@ -26,7 +25,7 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.MyViewHold
     List<Genre> genres;
     private final HashMap<String, Integer> gat = new HashMap<>();
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView genreName;
         public ImageView imageGenre;
 
@@ -74,9 +73,9 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.MyViewHold
         myViewHolder.genreName.setText(genre.getName());
 
         Integer resource = gat.get(genre.getName());
-        if(resource != null){
+        if (resource != null) {
             myViewHolder.imageGenre.setImageResource(resource);
-        } else{
+        } else {
             //domyslny obrazek
             myViewHolder.imageGenre.setImageResource(R.drawable.logo);
         }
@@ -90,6 +89,7 @@ public class GenresAdapter extends RecyclerView.Adapter<GenresAdapter.MyViewHold
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return genres.size();

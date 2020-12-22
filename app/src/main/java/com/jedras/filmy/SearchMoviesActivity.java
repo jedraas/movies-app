@@ -1,19 +1,18 @@
 package com.jedras.filmy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.widget.SearchView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -45,7 +44,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.popular:
                 Intent popular = new Intent(getApplicationContext(), PopularMoviesActivity.class);
                 startActivity(popular);
@@ -122,9 +121,9 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
 
         @Override
         protected MovieResultsPage doInBackground(String... strings) {
-            String text = (strings.length > 0)?strings[0]:null;
+            String text = (strings.length > 0) ? strings[0] : null;
             TmdbSearch search = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getSearch();
-            MovieResultsPage resultSearch = search.searchMovie(text, null, null, true,null);
+            MovieResultsPage resultSearch = search.searchMovie(text, null, null, true, null);
             return resultSearch;
         }
 
@@ -133,7 +132,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
             super.onPostExecute(resultSearch);
 
             list.clear();
-            for(MovieDb movieDb : resultSearch){
+            for (MovieDb movieDb : resultSearch) {
                 list.add(movieDb);
             }
             movieAdapter.notifyDataSetChanged();
