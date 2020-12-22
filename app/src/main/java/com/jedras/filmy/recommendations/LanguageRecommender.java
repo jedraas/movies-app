@@ -13,10 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import info.movito.themoviedbapi.TmdbDiscover;
 import info.movito.themoviedbapi.TmdbDiscoverAdditions;
-import info.movito.themoviedbapi.model.Discover;
-import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
