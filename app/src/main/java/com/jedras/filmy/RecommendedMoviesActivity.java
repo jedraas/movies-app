@@ -31,8 +31,10 @@ import java.util.Map;
 import java.util.Set;
 
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbDiscoverPeople;
 import info.movito.themoviedbapi.TmdbFind;
 import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.TmdbPeopleExternalID;
 import info.movito.themoviedbapi.model.FindResults;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
@@ -44,12 +46,13 @@ import info.movito.themoviedbapi.model.people.PersonCast;
  */
 public class RecommendedMoviesActivity extends AppCompatActivity {
 
-        MovieDao movieDao;
-        RecyclerView recyclerView;
-        MovieAdapter movieAdapter;
-        ArrayList<MovieDb> list = new ArrayList<>();
+    private TmdbApi tmdbApi;
+    MovieDao movieDao;
+    RecyclerView recyclerView;
+    MovieAdapter movieAdapter;
+    ArrayList<MovieDb> list = new ArrayList<>();
 
-        @Override
+    @Override
         public boolean onCreateOptionsMenu(Menu menu) {
             MenuInflater menuInflater = getMenuInflater();
             menuInflater.inflate(R.menu.main_menu, menu);
@@ -150,14 +153,17 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
 
             @Override
             protected ArrayList<MovieDb> doInBackground(Void... ignore) {
-               List<Movie> favourites = movieDao.getAll();
-               ArrayList<MovieDb> list = new ArrayList<>();
+
+                tmdbApi = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc");
+
+                List<Movie> favourites = movieDao.getAll();
+                ArrayList<MovieDb> list = new ArrayList<>();
 
                 /**
                  * Pobiera filmy najwyżej oceniane i wyświetla je jako karty, jeżeli użytkownik nie posiada filmów ulubionych.
                  */
                 if (favourites.isEmpty()) {
-                        TmdbMovies topRated = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+                        TmdbMovies topRated = tmdbApi.getMovies();
                         MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, null);
                         for(MovieDb movieDb : resultTopRated){
                             list.add(movieDb);
@@ -170,9 +176,9 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                  */
                 for(Movie favourite : favourites) {
                     int movieID = favourite.movieID;
-                    TmdbMovies recommendedMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+                    TmdbMovies recommendedMovies = tmdbApi.getMovies();
                     MovieResultsPage resultRecommended = recommendedMovies.getRecommendedMovies(movieID, null, null);
-                    TmdbMovies similarMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+                    TmdbMovies similarMovies = tmdbApi.getMovies();
                     MovieResultsPage resultSimilarMovie = similarMovies.getSimilarMovies(movieID, null, null);
                     int i = 0;
                     for (MovieDb recommendedMovie : resultRecommended) {
@@ -187,7 +193,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                         if (j > 2) break;
                         list.add(similarMovie);
                     }
-
 
                    try {
                        for (PersonCast personCast : favourite.movieDB.getCast()) {
@@ -205,25 +210,44 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                 HashMap<PersonCast, Integer> sortedCastByNumber = sortByValue(castByNumber);
 
                 ArrayList<PersonCast> popularCast = new ArrayList<>();
+                ArrayList<String> popularCastExternalIDs = new ArrayList<>();
+
                 int i =0;
                 for(Map.Entry<PersonCast, Integer> perCast : sortedCastByNumber.entrySet()){
                     i++;
                     if(i > 4) break;
-                    if(perCast.getValue() > 1)
-                    popularCast.add(perCast.getKey());
-                }
+                    if(perCast.getValue() > 1) {
 
+                        TmdbApi api = tmdbApi;
+                        TmdbPeopleExternalID peopleExternalID = new TmdbPeopleExternalID(api);
+                        int castId = perCast.getKey().getCastId();
+                        String externalID = peopleExternalID.getExternalID(castId);
+                        popularCastExternalIDs.add(externalID);
+
+                        popularCast.add(perCast.getKey());
+                    }
+                }
 
                 if(popularCast.size() > 0)
                 {
-                    FindResults resultFind = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getFind().find(popularCast.get(0).getCharacter(), TmdbFind.ExternalSource.imdb_id, "en");
+                    TmdbApi api = tmdbApi;
+                    TmdbDiscoverPeople discoverPeople = new TmdbDiscoverPeople(api);
+
+                    String personId = String.valueOf(popularCast.get(0).getId());
+                    MovieResultsPage discoverWithPeople = discoverPeople.getDiscoverWithPeople(personId);
+
                     int j = 0;
-                    for(MovieDb popularMovie : resultFind.getMovieResults()){
+                    for(MovieDb popularMovie : discoverWithPeople.getResults()) {
                         j++;
                         if(j > 3) break;
                         list.add(popularMovie);
                     }
+                    // TODO: Discover, nie wszedzie discover zwraca aktorow. Czy to jest problem jak aktor straje sie rezyserem?
                 }
+
+                // TODO: Po rezyserze
+                // TODO: Po gatunku
+                // TODO: Po jezyku?
 
                 Set<MovieDb> set = new HashSet<>(list);
 
