@@ -18,6 +18,10 @@ import com.jedras.filmy.database.Movie;
 import com.jedras.filmy.database.MovieDao;
 import com.jedras.filmy.database.MovieDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.jedras.filmy.recommendations.CollaborativeRecommender;
+import com.jedras.filmy.recommendations.DirectorRecommender;
+import com.jedras.filmy.recommendations.MovieRecommender;
+import com.jedras.filmy.recommendations.PopularCastRecommender;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -125,32 +129,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
         * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
         */
         public class DownloadMovieRecommended extends AsyncTask<Void, Void, ArrayList<MovieDb>>{
-
-            // function to sort hashmap by values
-            public  HashMap<PersonCast, Integer> sortByValue(HashMap<PersonCast, Integer> hm)
-            {
-                // Create a list from elements of HashMap
-                List<Map.Entry<PersonCast, Integer> > list =
-                        new LinkedList<>(hm.entrySet());
-
-                // Sort the list
-                Collections.sort(list, new Comparator<Map.Entry<PersonCast, Integer> >() {
-                    public int compare(Map.Entry<PersonCast, Integer> cast1,
-                                       Map.Entry<PersonCast, Integer> cast2)
-                    {
-                        return (cast2.getValue()).compareTo(cast1.getValue());
-                    }
-                });
-
-                // put data from sorted list to hashmap
-                HashMap<PersonCast, Integer> temp = new LinkedHashMap<>();
-                for (Map.Entry<PersonCast, Integer> aa : list) {
-                    temp.put(aa.getKey(), aa.getValue());
-                }
-                return temp;
-            }
-
-
             @Override
             protected ArrayList<MovieDb> doInBackground(Void... ignore) {
 
@@ -169,88 +147,21 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                             list.add(movieDb);
                         }
                 }
-                HashMap<PersonCast, Integer> castByNumber = new HashMap<> ();
 
                 /**
                  * Pobiera filmy ulubione z bazy danych, pobiera dla nich 2 filmy rekomendowane oraz 2 filmy podobne i zapisuje w obiekcie list.
                  */
-                for(Movie favourite : favourites) {
-                    int movieID = favourite.movieID;
-                    TmdbMovies recommendedMovies = tmdbApi.getMovies();
-                    MovieResultsPage resultRecommended = recommendedMovies.getRecommendedMovies(movieID, null, null);
-                    TmdbMovies similarMovies = tmdbApi.getMovies();
-                    MovieResultsPage resultSimilarMovie = similarMovies.getSimilarMovies(movieID, null, null);
-                    int i = 0;
-                    for (MovieDb recommendedMovie : resultRecommended) {
-                        i++;
-                        if (i > 2) break;
-                        list.add(recommendedMovie);
-                    }
 
-                    int j = 0;
-                    for (MovieDb similarMovie : resultSimilarMovie) {
-                        j++;
-                        if (j > 2) break;
-                        list.add(similarMovie);
-                    }
+                list.addAll(new CollaborativeRecommender().getRecommendations(favourites));
+                list.addAll(new PopularCastRecommender().getRecommendations(favourites));
+                list.addAll(new DirectorRecommender().getRecommendations(favourites));
 
-                   try {
-                       for (PersonCast personCast : favourite.movieDB.getCast()) {
-                           Integer cast = castByNumber.get(personCast);
-                           if (cast == null) cast = 0;
-                           cast++;
-                           castByNumber.put(personCast, cast);
-                       }
-
-                   }
-                   catch(NullPointerException e){};
-
-               }
-
-                HashMap<PersonCast, Integer> sortedCastByNumber = sortByValue(castByNumber);
-
-                ArrayList<PersonCast> popularCast = new ArrayList<>();
-                ArrayList<String> popularCastExternalIDs = new ArrayList<>();
-
-                int i =0;
-                for(Map.Entry<PersonCast, Integer> perCast : sortedCastByNumber.entrySet()){
-                    i++;
-                    if(i > 4) break;
-                    if(perCast.getValue() > 1) {
-
-                        TmdbApi api = tmdbApi;
-                        TmdbPeopleExternalID peopleExternalID = new TmdbPeopleExternalID(api);
-                        int castId = perCast.getKey().getCastId();
-                        String externalID = peopleExternalID.getExternalID(castId);
-                        popularCastExternalIDs.add(externalID);
-
-                        popularCast.add(perCast.getKey());
-                    }
-                }
-
-                if(popularCast.size() > 0)
-                {
-                    TmdbApi api = tmdbApi;
-                    TmdbDiscoverPeople discoverPeople = new TmdbDiscoverPeople(api);
-
-                    String personId = String.valueOf(popularCast.get(0).getId());
-                    MovieResultsPage discoverWithPeople = discoverPeople.getDiscoverWithPeople(personId);
-
-                    int j = 0;
-                    for(MovieDb popularMovie : discoverWithPeople.getResults()) {
-                        j++;
-                        if(j > 3) break;
-                        list.add(popularMovie);
-                    }
-                    // TODO: Discover, nie wszedzie discover zwraca aktorow. Czy to jest problem jak aktor straje sie rezyserem?
-                }
 
                 // TODO: Po rezyserze
                 // TODO: Po gatunku
                 // TODO: Po jezyku?
 
                 Set<MovieDb> set = new HashSet<>(list);
-
                 for(Movie favourite : favourites){
                     set.remove(favourite.movieDB);
                 }
