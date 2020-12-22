@@ -156,8 +156,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                 list.addAll(new PopularCastRecommender().getRecommendations(favourites));
                 list.addAll(new DirectorRecommender().getRecommendations(favourites));
 
-
-                // TODO: Po rezyserze
                 // TODO: Po gatunku
                 // TODO: Po jezyku?
 
