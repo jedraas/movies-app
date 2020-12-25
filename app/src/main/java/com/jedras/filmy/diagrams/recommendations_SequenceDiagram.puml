@@ -1,0 +1,57 @@
+@startuml
+participant RecommendedMoviesActivity
+participant MovieDao
+participant CollaborativeRecommender
+participant DirectorRecommender
+participant GenreRecommender
+participant LanguageRecommender
+participant PopularCastRecommender
+
+
+RecommendedMoviesActivity -> MovieDao: fetch favourite movies
+RecommendedMoviesActivity <- MovieDao:
+
+RecommendedMoviesActivity -> CollaborativeRecommender: getRecommendations(favourites)
+group for each favourite
+CollaborativeRecommender -> TheMovieDbAPI: getRecommendedMovies()
+TheMovieDbAPI -> CollaborativeRecommender: add NUMBER_OF_RECOMMENDED_MOVIES\nto list
+CollaborativeRecommender -> TheMovieDbAPI: getSimilarMovies()
+TheMovieDbAPI -> CollaborativeRecommender: add NUMBER_OF_SIMILAR_MOVIES\nto list
+end
+CollaborativeRecommender -> RecommendedMoviesActivity: return list
+
+RecommendedMoviesActivity -> DirectorRecommender: getRecommendations(favourites)
+rnote over DirectorRecommender: find NUMBER_OF_MOST_POPULAR_DIRECTORS\nfrom favourites
+group for each director
+DirectorRecommender -> TheMovieDbAPI: getDiscoverWithPeople(director)
+TheMovieDbAPI -> DirectorRecommender: add NUMBER_OF_MOST_POPULAR_DIRECTORS to list
+end
+DirectorRecommender -> RecommendedMoviesActivity: return list
+
+RecommendedMoviesActivity -> GenreRecommender: getRecommendations(favourites)
+rnote over GenreRecommender: find NUMBER_OF_MOST_POPULAR_GENRE\nfrom favourites
+group for each genre
+GenreRecommender -> TheMovieDbAPI: getDiscover(genre)
+TheMovieDbAPI -> GenreRecommender: add NUMBER_OF_MOST_POPULAR_GENRE to list
+end
+GenreRecommender -> RecommendedMoviesActivity: return list
+
+RecommendedMoviesActivity -> LanguageRecommender: getRecommendations(favourites)
+rnote over LanguageRecommender: find NUMBER_OF_MOST_POPULAR_LANGUAGE\nfrom favourites
+group for each language
+LanguageRecommender -> TheMovieDbAPI: getDiscoverWithOriginalLanguage(language)
+TheMovieDbAPI -> LanguageRecommender: add NUMBER_OF_MOST_POPULAR_LANGUAGE to list
+end
+LanguageRecommender -> RecommendedMoviesActivity: return list
+
+RecommendedMoviesActivity -> PopularCastRecommender: getRecommendations(favourites)
+rnote over PopularCastRecommender: find NUMBER_OF_MOST_POPULAR_CAST\nfrom favourites
+group for each cast
+PopularCastRecommender -> TheMovieDbAPI: getDiscoverWithPeople(cast)
+TheMovieDbAPI -> PopularCastRecommender: add NUMBER_OF_MOST_POPULAR_CAST to list
+end
+PopularCastRecommender -> RecommendedMoviesActivity: return list
+
+rnote over RecommendedMoviesActivity: aggregate results\nfilter out favourites\nand sort by popularity
+
+@enduml

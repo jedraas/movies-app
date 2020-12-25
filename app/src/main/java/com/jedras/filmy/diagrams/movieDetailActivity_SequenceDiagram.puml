@@ -1,0 +1,20 @@
+@startuml
+MovieDetailActivity -> DownloadCast: downloadCast.execute()
+MovieDetailActivity -> DownloadVideo: downloadVideo.execute()
+MovieDetailActivity -> DownloadMovieDetail: downloadMovieDetail.execute()
+
+DownloadCast -> API: getCredits()
+API -> DownloadCast: return credits
+rnote over DownloadCast: parse credits, fetch \ncast and director
+DownloadCast --> MovieDetailActivity: update UI
+
+DownloadVideo -> API: getVideos()
+API -> DownloadVideo: return video
+rnote over DownloadVideo: parse video and fetch trailer URL
+DownloadVideo --> MovieDetailActivity: update UI
+
+DownloadMovieDetail -> API: getMovie()
+API -> DownloadMovieDetail: return detail
+rnote over DownloadMovieDetail: parse movie and fetch details
+DownloadMovieDetail --> MovieDetailActivity: update UI
+@enduml
