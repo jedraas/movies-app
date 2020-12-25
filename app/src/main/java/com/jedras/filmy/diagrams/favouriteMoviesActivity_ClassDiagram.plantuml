@@ -1,0 +1,52 @@
+@startuml
+
+title __FAVOURITE MOVIES ACTIVITY's Class Diagram__\n
+
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.FavouriteMoviesActivity {
+        ~ list : ArrayList<MovieDb>
+        ~ recyclerView : RecyclerView
+        + favourite()
+        + onCreateOptionsMenu()
+        + onOptionsItemSelected()
+        # onCreate()
+        # onResume()
+    }
+  }
+  
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.FavouriteMoviesActivity.GetMovieFromDatabase {
+        # doInBackground()
+        # onPostExecute()
+    }
+  }
+
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.MovieAdapter {
+        ~ context : Context
+        ~ list : ArrayList<MovieDb>
+        + MovieAdapter()
+        + getItemCount()
+        + onBindViewHolder()
+        + onCreateViewHolder()
+    }
+  }
+  
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.MovieAdapter.MyViewHolder {
+        + imageView : ImageView
+        + title : TextView
+        + MyViewHolder()
+    }
+  }
+
+  com.jedras.filmy.FavouriteMoviesActivity o-- com.jedras.filmy.MovieAdapter : movieAdapter
+  com.jedras.filmy.FavouriteMoviesActivity o-- com.jedras.filmy.database.MovieDao : movieDao
+  com.jedras.filmy.FavouriteMoviesActivity +-down- com.jedras.filmy.FavouriteMoviesActivity.GetMovieFromDatabase
+  com.jedras.filmy.MovieAdapter +-down- com.jedras.filmy.MovieAdapter.MyViewHolder
+
+@enduml

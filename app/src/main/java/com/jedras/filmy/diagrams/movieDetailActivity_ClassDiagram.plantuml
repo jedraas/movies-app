@@ -1,0 +1,71 @@
+@startuml
+
+title __MOVIE DETAIL ACTIVITY's Class Diagram__\n
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.CastAdapter {
+        ~ context : Context
+        ~ list : ArrayList<PersonCast>
+        + CastAdapter()
+        + getItemCount()
+        + onBindViewHolder()
+        + onCreateViewHolder()
+    }
+  }
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.CastAdapter.MyViewHolder {
+        + imageCast : ImageView
+        + textCast : TextView
+        + MyViewHolder()
+    }
+  }
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.MovieDetailActivity {
+        ~ movieDB : MovieDb
+        - mSensorManager : SensorManager
+        + addToFavourites()
+        + download()
+        + favouriteButtonClicked()
+        + isFavourite()
+        + removeFromFavourites()
+        + watchTrailer()
+        # onCreate()
+        # onPause()
+        # onResume()
+    }
+  }
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.MovieDetailActivity.DownloadCast {
+        # doInBackground()
+        # onPostExecute()
+    }
+  }
+  
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.MovieDetailActivity.DownloadMovie {
+        # doInBackground()
+        # onPostExecute()
+    }
+  }
+  
+
+  namespace com.jedras.filmy {
+    class com.jedras.filmy.MovieDetailActivity.DownloadMovieDetail {
+        # doInBackground()
+        # onPostExecute()
+    }
+  }
+
+  com.jedras.filmy.MovieDetailActivity o-- com.jedras.filmy.database.MovieDao : movieDao
+  com.jedras.filmy.CastAdapter +-down- com.jedras.filmy.CastAdapter.MyViewHolder
+  com.jedras.filmy.MovieDetailActivity o-- com.jedras.filmy.CastAdapter : castAdapter
+  com.jedras.filmy.MovieDetailActivity +-down- com.jedras.filmy.MovieDetailActivity.DownloadCast
+  com.jedras.filmy.MovieDetailActivity +-down- com.jedras.filmy.MovieDetailActivity.DownloadMovie
+  com.jedras.filmy.MovieDetailActivity +-down- com.jedras.filmy.MovieDetailActivity.DownloadMovieDetail
+
+
+@enduml
