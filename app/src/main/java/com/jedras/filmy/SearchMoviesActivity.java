@@ -31,6 +31,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
     SearchView searchView;
     RecyclerView recyclerView;
     MovieAdapter movieAdapter;
+    String query;
     ArrayList<MovieDb> list = new ArrayList<>();
 
     @Override
@@ -102,11 +103,17 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
     }
 
     @Override
-    public boolean onQueryTextSubmit(String query) {
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute(query);
+    public boolean onQueryTextSubmit(String query_) {
+        query = query_;
+        list.clear();
+        searchMovies(0);
         searchView.clearFocus();
         return true;
+    }
+
+    private void searchMovies(Integer page) {
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute(query, String.valueOf(page));
     }
 
     @Override
@@ -122,8 +129,9 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         @Override
         protected MovieResultsPage doInBackground(String... strings) {
             String text = (strings.length > 0) ? strings[0] : null;
+            Integer page =  Integer.valueOf(strings[1]);
             TmdbSearch search = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getSearch();
-            MovieResultsPage resultSearch = search.searchMovie(text, null, null, true, null);
+            MovieResultsPage resultSearch = search.searchMovie(text, null, null, true, page);
             return resultSearch;
         }
 
@@ -131,7 +139,6 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         protected void onPostExecute(MovieResultsPage resultSearch) {
             super.onPostExecute(resultSearch);
 
-            list.clear();
             for (MovieDb movieDb : resultSearch) {
                 list.add(movieDb);
             }
@@ -153,11 +160,19 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         searchView.setOnQueryTextListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = gridLayoutManager;
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+               searchMovies(page);
+            }
+
+        });
 
     }
 }

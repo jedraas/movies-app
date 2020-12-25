@@ -106,11 +106,11 @@ public class GenresDetailActivity extends AppCompatActivity {
     public class DownloadGenreMovie extends AsyncTask<Integer, Void, ArrayList<MovieDb>> {
 
         @Override
-        protected ArrayList<MovieDb> doInBackground(Integer... strings) {
+        protected ArrayList<MovieDb> doInBackground(Integer... page) {
             ArrayList<MovieDb> list = new ArrayList<>();
             int movieID = genre.getId();
             TmdbGenre genreMovies = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getGenre();
-            MovieResultsPage resultGenreMovie = genreMovies.getGenreMovies(movieID, null, null, true
+            MovieResultsPage resultGenreMovie = genreMovies.getGenreMovies(movieID, null, page[0], true
             );
             for (MovieDb movieDb : resultGenreMovie) {
                 list.add(movieDb);
@@ -134,9 +134,9 @@ public class GenresDetailActivity extends AppCompatActivity {
     /**
      * Pobiera filmy danego gatunku z bazy danych i wyświetla je jako karty.
      */
-    public void genreMovie() {
+    public void genreMovie(Integer page) {
         DownloadGenreMovie downloadMovie = new DownloadGenreMovie();
-        downloadMovie.execute(genre.getId());
+        downloadMovie.execute(page);
     }
 
     @Override
@@ -150,13 +150,21 @@ public class GenresDetailActivity extends AppCompatActivity {
 
         bottomNavigation();
 
-        genreMovie();
+        genreMovie(0);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = gridLayoutManager;
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                genreMovie(page);
+            }
+
+        });
     }
 }

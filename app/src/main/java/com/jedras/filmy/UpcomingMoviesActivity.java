@@ -101,22 +101,14 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * Pobiera nadchodzące filmy z bazy danych i wyświetla je jako karty.
-     */
-    public void upComing() {
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute();
-    }
-
-    /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
+    public class DownloadMovie extends AsyncTask<Integer, Void, MovieResultsPage> {
 
         @Override
-        protected MovieResultsPage doInBackground(String... strings) {
+        protected MovieResultsPage doInBackground(Integer... page) {
             TmdbMovies upComing = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieResultsPage resultUpComing = upComing.getUpcoming(null, null, null);
+            MovieResultsPage resultUpComing = upComing.getUpcoming(null, page[0], null);
             return resultUpComing;
         }
 
@@ -129,6 +121,15 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
             }
             movieAdapter.notifyDataSetChanged();
         }
+
+    }
+
+    /**
+     * Pobiera nadchodzące filmy z bazy danych i wyświetla je jako karty.
+     */
+    public void upComing(Integer page) {
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute(page);
     }
 
     @Override
@@ -140,13 +141,21 @@ public class UpcomingMoviesActivity extends AppCompatActivity {
 
         bottomNavigation();
 
-        upComing();
+        upComing(0);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = gridLayoutManager;
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                upComing(page);
+            }
+
+        });
     }
 }

@@ -102,22 +102,14 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * Pobiera najwyżej oceniane filmy z bazy danych i wyświetla je jako karty.
-     */
-    public void topRated() {
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute();
-    }
-
-    /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
+    public class DownloadMovie extends AsyncTask<Integer, Void, MovieResultsPage> {
 
         @Override
-        protected MovieResultsPage doInBackground(String... strings) {
+        protected MovieResultsPage doInBackground(Integer... page) {
             TmdbMovies topRated = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, null);
+            MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, page[0]);
             return resultTopRated;
         }
 
@@ -130,6 +122,15 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
             }
             movieAdapter.notifyDataSetChanged();
         }
+
+    }
+
+    /**
+     * Pobiera najwyżej oceniane filmy z bazy danych i wyświetla je jako karty.
+     */
+    public void topRated(Integer page) {
+        DownloadMovie downloadMovie = new DownloadMovie();
+        downloadMovie.execute(page);
     }
 
     @Override
@@ -141,13 +142,20 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
 
         bottomNavigation();
 
-        topRated();
+        topRated(0);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
+        GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = gridLayoutManager;        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                topRated(page);
+            }
+
+        });
     }
 }

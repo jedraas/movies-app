@@ -3,6 +3,7 @@ package com.jedras.filmy;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -105,12 +106,12 @@ public class PopularMoviesActivity extends AppCompatActivity {
     /**
      * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
      */
-    public class DownloadMovie extends AsyncTask<String, Void, MovieResultsPage> {
+    public class DownloadMovie extends AsyncTask<Integer, Void, MovieResultsPage> {
 
         @Override
-        protected MovieResultsPage doInBackground(String... strings) {
+        protected MovieResultsPage doInBackground(Integer... page) {
             TmdbMovies popular = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
-            MovieResultsPage resultPopular = popular.getPopularMovies(null, null);
+            MovieResultsPage resultPopular = popular.getPopularMovies(null, page[0]);
             return resultPopular;
         }
 
@@ -129,9 +130,9 @@ public class PopularMoviesActivity extends AppCompatActivity {
     /**
      * Pobiera popularne filmy z bazy danych i wyświetla je jako karty.
      */
-    public void popular() {
+    public void popular(Integer page) {
         DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute();
+        downloadMovie.execute(page);
     }
 
     @Override
@@ -143,14 +144,23 @@ public class PopularMoviesActivity extends AppCompatActivity {
 
         bottomNavigation();
 
+        popular(0);
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = gridLayoutManager;
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         movieAdapter = new MovieAdapter(this, list);
         recyclerView.setAdapter(movieAdapter);
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                popular(page);
+            }
 
-        popular();
+        });
+
 
     }
 }
