@@ -39,6 +39,7 @@ import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
+import info.movito.themoviedbapi.model.people.PersonCrew;
 
 /**
  * Aktywność wyświetlająca szczegóły filmu.
@@ -49,6 +50,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     ImageView imageBackdrop;
     ImageView imagePoster;
     TextView textRuntime;
+    TextView textDirector;
     MovieDb movieDB;
     Button trailerButton;
     Button favouritesButton;
@@ -235,7 +237,20 @@ public class MovieDetailActivity extends AppCompatActivity {
                 cast.add(personCast);
             }
             castAdapter.notifyDataSetChanged();
+
+            PersonCrew director = null;
+            for (PersonCrew personCrew : resultCredits.getCrew()) {
+                if (personCrew.getJob().equals("Director")) {
+                    director = personCrew;
+                    break;
+                }
+            }
+            if (director != null) {
+                String directedBy = "<b>Directed by: </b>" + director.getName();
+                textDirector.setText(HtmlCompat.fromHtml(directedBy, HtmlCompat.FROM_HTML_MODE_LEGACY));
+            }
         }
+
     }
 
     /**
@@ -287,6 +302,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         TextView textLanguage = (TextView) findViewById(R.id.textLanguage);
         TextView textVote = (TextView) findViewById(R.id.textVotes);
         TextView textTotalVote = (TextView) findViewById(R.id.textTotalVotes);
+        textDirector = (TextView) findViewById(R.id.textDirector);
         TextView textDate = (TextView) findViewById(R.id.textDate);
         textRuntime = (TextView) findViewById(R.id.textRuntime);
         trailerButton = (Button) findViewById(R.id.trailers);
