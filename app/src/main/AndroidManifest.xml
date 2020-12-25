@@ -13,7 +13,7 @@
         <activity android:name="com.jedras.filmy.SearchMoviesActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name="com.jedras.filmy.FavouritesMoviesActivity" />
+        <activity android:name="com.jedras.filmy.FavouriteMoviesActivity" />
         <activity android:name="com.jedras.filmy.NowPlayingMoviesActivity" />
         <activity android:name="com.jedras.filmy.TopRatedMoviesActivity" />
         <activity android:name="com.jedras.filmy.UpcomingMoviesActivity" />

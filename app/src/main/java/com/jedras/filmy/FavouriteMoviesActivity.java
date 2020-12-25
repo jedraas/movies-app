@@ -27,7 +27,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 /**
  * Aktywność wyświetlająca ulubione filmy.
  */
-public class FavouritesMoviesActivity extends AppCompatActivity {
+public class FavouriteMoviesActivity extends AppCompatActivity {
 
     MovieDao movieDao;
     RecyclerView recyclerView;
@@ -88,7 +88,7 @@ public class FavouritesMoviesActivity extends AppCompatActivity {
                         startActivity(popular);
                         return true;
                     case R.id.favourites:
-                        Intent favourites = new Intent(getApplicationContext(), FavouritesMoviesActivity.class);
+                        Intent favourites = new Intent(getApplicationContext(), FavouriteMoviesActivity.class);
                         startActivity(favourites);
                         return true;
                     case R.id.search:

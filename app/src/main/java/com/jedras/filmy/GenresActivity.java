@@ -87,7 +87,7 @@ public class GenresActivity extends AppCompatActivity {
                         startActivity(popular);
                         return true;
                     case R.id.favourites:
-                        Intent favourites = new Intent(getApplicationContext(), FavouritesMoviesActivity.class);
+                        Intent favourites = new Intent(getApplicationContext(), FavouriteMoviesActivity.class);
                         startActivity(favourites);
                         return true;
                     case R.id.search:
