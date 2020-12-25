@@ -142,7 +142,7 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
 
         bottomNavigation();
 
-        topRated(0);
+        topRated(1);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
@@ -153,7 +153,7 @@ public class TopRatedMoviesActivity extends AppCompatActivity {
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                topRated(page);
+                topRated(page + 1);
             }
 
         });

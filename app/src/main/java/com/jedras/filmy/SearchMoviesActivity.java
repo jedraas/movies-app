@@ -106,7 +106,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
     public boolean onQueryTextSubmit(String query_) {
         query = query_;
         list.clear();
-        searchMovies(0);
+        searchMovies(1);
         searchView.clearFocus();
         return true;
     }
@@ -169,7 +169,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-               searchMovies(page);
+               searchMovies(page + 1);
             }
 
         });

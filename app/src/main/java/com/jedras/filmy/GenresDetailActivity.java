@@ -150,7 +150,7 @@ public class GenresDetailActivity extends AppCompatActivity {
 
         bottomNavigation();
 
-        genreMovie(0);
+        genreMovie(1);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
@@ -162,7 +162,7 @@ public class GenresDetailActivity extends AppCompatActivity {
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                genreMovie(page);
+                genreMovie(page + 1);
             }
 
         });

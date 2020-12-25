@@ -141,7 +141,7 @@ public class NowPlayingMoviesActivity extends AppCompatActivity {
 
         bottomNavigation();
 
-        nowPlaying(0);
+        nowPlaying(1);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
@@ -153,7 +153,7 @@ public class NowPlayingMoviesActivity extends AppCompatActivity {
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                nowPlaying(page);
+                nowPlaying(page + 1);
             }
 
         });

@@ -144,7 +144,7 @@ public class PopularMoviesActivity extends AppCompatActivity {
 
         bottomNavigation();
 
-        popular(0);
+        popular(1);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         GridLayoutManager gridLayoutManager =  new GridLayoutManager(this, 2);
@@ -156,7 +156,7 @@ public class PopularMoviesActivity extends AppCompatActivity {
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                popular(page);
+                popular(page + 1);
             }
 
         });
