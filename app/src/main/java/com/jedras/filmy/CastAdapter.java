@@ -49,7 +49,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
         myViewHolder.textCast.setText(list.get(i).getName());
         String path = "https://image.tmdb.org/t/p/w200" + list.get(i).getProfilePath();
-        Picasso.get().load(path).into(myViewHolder.imageCast);
+        Picasso.get().load(path).error(R.drawable.placeholder).into(myViewHolder.imageCast);
     }
 
     @Override
