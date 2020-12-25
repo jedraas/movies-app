@@ -46,7 +46,7 @@ title __MOVIE DETAIL ACTIVITY's Class Diagram__\n
   
 
   namespace com.jedras.filmy {
-    class com.jedras.filmy.MovieDetailActivity.DownloadMovie {
+    class com.jedras.filmy.MovieDetailActivity.DownloadVideo {
         # doInBackground()
         # onPostExecute()
     }
@@ -64,7 +64,7 @@ title __MOVIE DETAIL ACTIVITY's Class Diagram__\n
   com.jedras.filmy.CastAdapter +-down- com.jedras.filmy.CastAdapter.MyViewHolder
   com.jedras.filmy.MovieDetailActivity o-- com.jedras.filmy.CastAdapter : castAdapter
   com.jedras.filmy.MovieDetailActivity +-down- com.jedras.filmy.MovieDetailActivity.DownloadCast
-  com.jedras.filmy.MovieDetailActivity +-down- com.jedras.filmy.MovieDetailActivity.DownloadMovie
+  com.jedras.filmy.MovieDetailActivity +-down- com.jedras.filmy.MovieDetailActivity.DownloadVideo
   com.jedras.filmy.MovieDetailActivity +-down- com.jedras.filmy.MovieDetailActivity.DownloadMovieDetail
 
 

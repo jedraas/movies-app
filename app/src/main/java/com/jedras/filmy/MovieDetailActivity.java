@@ -190,7 +190,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     /**
      * Pobiera link do trailera z themoviedb API i konfiguruje przycisk do oglądania.
      */
-    public class DownloadMovie extends AsyncTask<Integer, Void, List<Video>> {
+    public class DownloadVideo extends AsyncTask<Integer, Void, List<Video>> {
 
         @Override
         protected List<Video> doInBackground(Integer... strings) {
@@ -257,8 +257,8 @@ public class MovieDetailActivity extends AppCompatActivity {
      * Pobiera szczegóły dotyczące filmu z bazy danych.
      */
     public void download() {
-        DownloadMovie downloadMovie = new DownloadMovie();
-        downloadMovie.execute(movieDB.getId());
+        DownloadVideo downloadVideo = new DownloadVideo();
+        downloadVideo.execute(movieDB.getId());
 
         DownloadCast downloadCast = new DownloadCast();
         downloadCast.execute(movieDB.getId());
