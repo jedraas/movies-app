@@ -2,6 +2,7 @@
 
 title __FAVOURITE MOVIES ACTIVITY's Class Diagram__\n
 
+caption Załącznik 3. Diagram klas aktywności FavouriteMoviesActivity
 
   namespace com.jedras.filmy {
     class com.jedras.filmy.FavouriteMoviesActivity {

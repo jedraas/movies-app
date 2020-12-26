@@ -1,4 +1,9 @@
 @startuml
+
+title __RECOMMENDATIONS's Sequence Diagram__\n
+
+caption Załącznik 5. Diagram sekwencji dla rekomendacji
+
 participant RecommendedMoviesActivity
 participant MovieDao
 participant CollaborativeRecommender

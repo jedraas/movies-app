@@ -1,4 +1,9 @@
 @startuml
+
+title __MOVIE DETAIL ACTIVITY's Sequence Diagram__\n
+
+caption Załącznik 2. Diagram sekwencji aktywności MovieDetailActivity dla pobierania i wyświetlania szczegółów dotyczących filmu
+
 MovieDetailActivity -> DownloadCast: downloadCast.execute()
 MovieDetailActivity -> DownloadVideo: downloadVideo.execute()
 MovieDetailActivity -> DownloadMovieDetail: downloadMovieDetail.execute()

@@ -2,6 +2,9 @@
 
 title __MOVIE DETAIL ACTIVITY's Class Diagram__\n
 
+caption Załącznik 1. Diagram klas aktywności MovieDetailActivity
+
+
   namespace com.jedras.filmy {
     class com.jedras.filmy.CastAdapter {
         ~ context : Context
