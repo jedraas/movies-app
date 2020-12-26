@@ -118,6 +118,10 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchVie
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        if (newText.length() == 0){
+            list.clear();
+            movieAdapter.notifyDataSetChanged();
+        }
         return true;
     }
 
