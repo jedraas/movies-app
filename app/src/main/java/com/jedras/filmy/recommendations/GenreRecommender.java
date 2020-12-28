@@ -21,6 +21,9 @@ import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
+/**
+ * Klasa rekomendującą filmy dla najpopularniejszych gatunków
+ */
 public class GenreRecommender extends MovieRecommender {
     public static final int NUMBER_OF_MOST_POPULAR_GENRE = 3;
     public static final int MIN_GENRE_POPULARITY = 2;
@@ -34,9 +37,9 @@ public class GenreRecommender extends MovieRecommender {
 
         // Sort the list
         Collections.sort(list, new Comparator<Map.Entry<Genre, Integer>>() {
-            public int compare(Map.Entry<Genre, Integer> cast1,
-                               Map.Entry<Genre, Integer> cast2) {
-                return (cast2.getValue()).compareTo(cast1.getValue());
+            public int compare(Map.Entry<Genre, Integer> genre1,
+                               Map.Entry<Genre, Integer> genre2) {
+                return (genre2.getValue()).compareTo(genre1.getValue());
             }
         });
 
@@ -66,7 +69,7 @@ public class GenreRecommender extends MovieRecommender {
 
         HashMap<Genre, Integer> sortedGenreByCount = sortByValue(genreByCount);
 
-        // Dodaj 4 najpopularniejszych gatunki do listy
+        // Dodaj 2 najpopularniejsze gatunki do listy
         ArrayList<Genre> popularGenre = new ArrayList<>();
         int i = 0;
         for (Map.Entry<Genre, Integer> perGenre : sortedGenreByCount.entrySet()) {

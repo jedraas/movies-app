@@ -18,10 +18,14 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCrew;
 
+/**
+ * Klasa rekomendującą filmy dla najpopularniejszych reżyserów
+ */
 public class DirectorRecommender extends MovieRecommender {
     public static final int NUMBER_OF_MOST_POPULAR_DIRECTORS = 3;
     public static final int MIN_DIRECTOR_POPULARITY = 2;
     public static final int NUMBER_OF_RECOMMENDED_MOVIES = 3;
+
 
     // function to sort hashmap by values
     public HashMap<PersonCrew, Integer> sortByValue(HashMap<PersonCrew, Integer> hm) {
@@ -31,9 +35,9 @@ public class DirectorRecommender extends MovieRecommender {
 
         // Sort the list
         Collections.sort(list, new Comparator<Map.Entry<PersonCrew, Integer>>() {
-            public int compare(Map.Entry<PersonCrew, Integer> cast1,
-                               Map.Entry<PersonCrew, Integer> cast2) {
-                return (cast2.getValue()).compareTo(cast1.getValue());
+            public int compare(Map.Entry<PersonCrew, Integer> crew1,
+                               Map.Entry<PersonCrew, Integer> crew2) {
+                return (crew2.getValue()).compareTo(crew1.getValue());
             }
         });
 
@@ -44,7 +48,6 @@ public class DirectorRecommender extends MovieRecommender {
         }
         return temp;
     }
-
 
     private ArrayList<PersonCrew> getPopularDirectors(List<Movie> favourites) {
         // Znajdź rezyserow i ich popularność w ulubionych
@@ -66,7 +69,7 @@ public class DirectorRecommender extends MovieRecommender {
         }
         HashMap<PersonCrew, Integer> sortedDirectorsByCount = sortByValue(directorsByCount);
 
-        // Dodaj 4 najpopularniejszych aktorów do listy
+        // Dodaj 2 najpopularniejszych reżyserów do listy
         ArrayList<PersonCrew> popularDirectors = new ArrayList<>();
         int i = 0;
         for (Map.Entry<PersonCrew, Integer> perDirector : sortedDirectorsByCount.entrySet()) {
@@ -83,7 +86,6 @@ public class DirectorRecommender extends MovieRecommender {
     @Override
     public ArrayList<MovieDb> getRecommendations(List<Movie> favourites) {
         ArrayList<PersonCrew> popularDirectors = getPopularDirectors(favourites);
-
         ArrayList<MovieDb> list = new ArrayList<>();
         TmdbDiscoverAdditions discoverPeople = new TmdbDiscoverAdditions(tmdbApi);
 
@@ -110,8 +112,6 @@ public class DirectorRecommender extends MovieRecommender {
                 }
                 list.add(popularMovie);
             }
-
-            // TODO: Discover, nie wszedzie discover zwraca aktorow. Czy to jest problem jak aktor straje sie rezyserem?
         }
 
         return list;

@@ -1,12 +1,15 @@
 package com.jedras.filmy;
 
+// Źródło: https://gist.github.com/pratikbutani/dc6b963aa12200b3ad88aecd0d103872
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-// https://gist.github.com/pratikbutani/dc6b963aa12200b3ad88aecd0d103872
-
+/**
+ * Klasa abstrakcyjna umożliwiająca stronicowanie
+ */
 abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
         // The minimum amount of items to have below your current scroll position
         // before loading more.

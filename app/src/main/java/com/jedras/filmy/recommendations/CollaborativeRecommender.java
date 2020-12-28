@@ -9,18 +9,22 @@ import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
+/**
+ * Klasa rekomendującą filmy przez themoviedbapi
+ */
 public class CollaborativeRecommender extends MovieRecommender {
     public static final int NUMBER_OF_RECOMMENDED_MOVIES = 3;
     public static final int NUMBER_OF_SIMILAR_MOVIES = 3;
 
     /**
-     * Dla każdego ulubionego filmu, pobera 2 filmy rekomendowane oraz 2 filmy podobne.
+     * Dla każdego ulubionego filmu, pobiera 2 filmy rekomendowane oraz 2 filmy podobne.
      *
      * @return
      */
     @Override
     public ArrayList<MovieDb> getRecommendations(List<Movie> favourites) {
         ArrayList<MovieDb> list = new ArrayList<>();
+
 
         for (Movie favourite : favourites) {
             int movieID = favourite.movieID;
@@ -43,7 +47,6 @@ public class CollaborativeRecommender extends MovieRecommender {
                 list.add(similarMovie);
             }
         }
-
         return list;
     }
 }

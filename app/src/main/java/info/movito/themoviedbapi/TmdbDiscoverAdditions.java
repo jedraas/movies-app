@@ -3,6 +3,9 @@ package info.movito.themoviedbapi;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.tools.ApiUrl;
 
+/** Klasa zawierająca metody umożliwiające odkrywanie filmu z daną obsadą lub językiem, które nie występują w holgerbrandl/themoviedbapi
+ *
+ */
 public class TmdbDiscoverAdditions extends AbstractTmdbApi {
 
     public static final String TMDB_METHOD_DISCOVER = "discover";

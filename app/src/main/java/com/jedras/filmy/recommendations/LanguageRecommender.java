@@ -17,6 +17,9 @@ import info.movito.themoviedbapi.TmdbDiscoverAdditions;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 
+/**
+ * Klasa rekomendującą filmy dla najpopularniejszych języków
+ */
 public class LanguageRecommender extends MovieRecommender {
 
     public static final int NUMBER_OF_MOST_POPULAR_LANGUAGE = 3;
@@ -31,9 +34,9 @@ public class LanguageRecommender extends MovieRecommender {
 
         // Sort the list
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-            public int compare(Map.Entry<String, Integer> cast1,
-                               Map.Entry<String, Integer> cast2) {
-                return (cast2.getValue()).compareTo(cast1.getValue());
+            public int compare(Map.Entry<String, Integer> language1,
+                               Map.Entry<String, Integer> language2) {
+                return (language2.getValue()).compareTo(language1.getValue());
             }
         });
 
@@ -61,7 +64,7 @@ public class LanguageRecommender extends MovieRecommender {
 
         HashMap<String, Integer> sortedLanguageByCount = sortByValue(languageByCount);
 
-        // Dodaj 4 najpopularniejszych gatunki do listy
+        // Dodaj 2 najpopularniejsze języki do listy
         ArrayList<String> popularLanguage = new ArrayList<>();
         int i = 0;
         for (Map.Entry<String, Integer> perLanguage : sortedLanguageByCount.entrySet()) {

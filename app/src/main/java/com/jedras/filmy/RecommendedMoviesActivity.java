@@ -1,6 +1,5 @@
 package com.jedras.filmy;
 
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -118,7 +117,7 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
     }
 
     /**
-     * Pobiera filmy z bazy danych i zapisuje je w obiekcie o nazwie list.
+     * Pobiera ulubione filmy z bazy danych, dodaje rekomendowane filmy i zapisuje je w obiekcie o nazwie list
      */
     public class DownloadMovieRecommended extends AsyncTask<Void, Void, ArrayList<MovieDb>> {
         @Override
@@ -139,10 +138,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                     list.add(movieDb);
                 }
             }
-
-            /**
-             * Pobiera filmy ulubione z bazy danych, pobiera dla nich 2 filmy rekomendowane oraz 2 filmy podobne i zapisuje w obiekcie list.
-             */
 
             list.addAll(new CollaborativeRecommender().getRecommendations(favourites));
             list.addAll(new PopularCastRecommender().getRecommendations(favourites));
@@ -166,10 +161,8 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
                     return movie1.getVoteAverage() > movie2.getVoteAverage() ? -1 : (movie1.getVoteAverage() < movie2.getVoteAverage()) ? 1 : 0;
                 }
             });
-
             return list;
         }
-
 
         @Override
         protected void onPostExecute(ArrayList<MovieDb> resultRecommended) {
@@ -177,14 +170,13 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
 
             for (MovieDb movieDb : resultRecommended) {
                 list.add(movieDb);
-
             }
             movieAdapter.notifyDataSetChanged();
         }
     }
 
     /**
-     * Pobiera rekomendowane filmy z bazy danych i wyświetla je jako karty.
+     * Pobiera ulubione filmy
      */
     public void downloadRecommended() {
         DownloadMovieRecommended downloadMovieRecommended = new DownloadMovieRecommended();
@@ -210,7 +202,6 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
         recyclerView.setAdapter(movieAdapter);
 
         downloadRecommended();
-
     }
 }
 

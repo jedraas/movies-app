@@ -8,6 +8,9 @@ import java.util.List;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.MovieDb;
 
+/** Klasa udostępniająca funkcjonalności wykorzystywane przez wszystkie klasy dziedziczące
+ *
+ */
 public abstract class MovieRecommender {
     TmdbApi tmdbApi;
 

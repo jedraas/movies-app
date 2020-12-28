@@ -18,6 +18,9 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCast;
 
+/**
+ * Klasa rekomendującą filmy dla najpopularniejszych aktorów
+ */
 public class PopularCastRecommender extends MovieRecommender {
     public static final int NUMBER_OF_MOST_POPULAR_CAST = 3;
     public static final int MIN_CAST_POPULARITY = 2;
@@ -62,7 +65,7 @@ public class PopularCastRecommender extends MovieRecommender {
         }
         HashMap<PersonCast, Integer> sortedCastByNumber = sortByValue(castByNumber);
 
-        // Dodaj 4 najpopularniejszych aktorów do listy
+        // Dodaj 2 najpopularniejszych aktorów do listy
         ArrayList<PersonCast> popularCast = new ArrayList<>();
         int i = 0;
         for (Map.Entry<PersonCast, Integer> perCast : sortedCastByNumber.entrySet()) {
@@ -78,7 +81,6 @@ public class PopularCastRecommender extends MovieRecommender {
 
     @Override
     public ArrayList<MovieDb> getRecommendations(List<Movie> favourites) {
-
         ArrayList<PersonCast> popularCast = getPopularCast(favourites);
         ArrayList<MovieDb> list = new ArrayList<>();
         TmdbDiscoverAdditions discoverPeople = new TmdbDiscoverAdditions(tmdbApi);
@@ -87,6 +89,7 @@ public class PopularCastRecommender extends MovieRecommender {
             String personId = String.valueOf(cast.getId());
             MovieResultsPage discoverWithPeople = discoverPeople.getDiscoverWithPeople(personId);
 
+            // Tworzę zbiór z ulubionymi, by w czasie O(1) sprawdzać czy film rekomendowany już jest w ulubionych
             Set<MovieDb> favouritesSet = new HashSet<MovieDb>();
             for (Movie favourite : favourites) {
                 favouritesSet.add(favourite.movieDB);
@@ -105,10 +108,7 @@ public class PopularCastRecommender extends MovieRecommender {
                 }
                 list.add(popularMovie);
             }
-
-            // TODO: Discover, nie wszedzie discover zwraca aktorow. Czy to jest problem jak aktor straje sie rezyserem?
         }
-
         return list;
     }
 }
