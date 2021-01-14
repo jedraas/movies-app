@@ -1,9 +1,10 @@
-# Android Movies App
+# Android Movie Recommendation App
 
 This is an Android application for discovering nad tracking movies. App uses [themoviedb API](https://www.themoviedb.org/documentation/api).
 
 ### Features: 
 - Discover top rated, upcoming, popular and now playing movies
+- Get the movie recommendation based on your favourite list
 - Find movies in the search box
 - Add the movie to your favourites list
 - Watch trailer
@@ -11,15 +12,25 @@ This is an Android application for discovering nad tracking movies. App uses [th
 
 ### Screenshots: 
 
-![moviesApp1](https://user-images.githubusercontent.com/50593682/86110265-a652f680-bac5-11ea-84eb-334bb6a9aa73.png)
+![movieApp1](https://user-images.githubusercontent.com/50593682/104647528-4c58fd80-56b2-11eb-9be5-1414bce56172.png)
+
+![movieApp2](https://user-images.githubusercontent.com/50593682/104647548-54b13880-56b2-11eb-9aa3-553188b48913.png)
 
 <br /><br />
 
-![moviesApp2](https://user-images.githubusercontent.com/50593682/86110611-13ff2280-bac6-11ea-8cb1-be4c998a8bb1.png)
+![movieApp3](https://user-images.githubusercontent.com/50593682/104647577-5f6bcd80-56b2-11eb-8e3e-3293cb208e68.png)
+3.png)
 
 <br /><br />
 
-![moviesApp3](https://user-images.githubusercontent.com/50593682/86111971-b075f480-bac7-11ea-9dfd-0e446dad911a.png)
+![movieApp4](https://user-images.githubusercontent.com/50593682/104647614-698dcc00-56b2-11eb-8dea-67a2bc478d05.png)
+
+<br /><br />
+
+![movieApp5](https://user-images.githubusercontent.com/50593682/104647626-701c4380-56b2-11eb-9980-f62bb2364f85.png)
+
+
+
 
 
 ### Languages and Libraries:
