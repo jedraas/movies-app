@@ -25,7 +25,6 @@ public class CollaborativeRecommender extends MovieRecommender {
     public ArrayList<MovieDb> getRecommendations(List<Movie> favourites) {
         ArrayList<MovieDb> list = new ArrayList<>();
 
-
         for (Movie favourite : favourites) {
             int movieID = favourite.movieID;
             TmdbMovies recommendedMovies = tmdbApi.getMovies();

@@ -54,7 +54,7 @@ public class GenreRecommender extends MovieRecommender {
     private ArrayList<Genre> getPopularGenre(List<Movie> favourites) {
         HashMap<Genre, Integer> genreByCount = new HashMap<>();
         for (Movie movie : favourites) {
-            TmdbMovies detail = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc").getMovies();
+            TmdbMovies detail = tmdbApi.getMovies();
             MovieDb resultDetail = detail.getMovie(movie.movieID, null);
             try {
                 for (Genre genre : resultDetail.getGenres()) {

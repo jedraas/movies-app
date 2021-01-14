@@ -125,43 +125,7 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
 
             tmdbApi = new TmdbApi("e8f32d6fe548e75c59021f2b82a91edc");
 
-            List<Movie> favourites = movieDao.getAll();
-            ArrayList<MovieDb> list = new ArrayList<>();
-
-            /**
-             * Pobiera filmy najwyżej oceniane i wyświetla je jako karty, jeżeli użytkownik nie posiada filmów ulubionych.
-             */
-            if (favourites.isEmpty()) {
-                TmdbMovies topRated = tmdbApi.getMovies();
-                MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, null);
-                for (MovieDb movieDb : resultTopRated) {
-                    list.add(movieDb);
-                }
-            }
-
-            list.addAll(new CollaborativeRecommender().getRecommendations(favourites));
-            list.addAll(new PopularCastRecommender().getRecommendations(favourites));
-            list.addAll(new DirectorRecommender().getRecommendations(favourites));
-            list.addAll(new GenreRecommender().getRecommendations(favourites));
-            list.addAll(new LanguageRecommender().getRecommendations(favourites));
-
-            Set<MovieDb> set = new HashSet<>(list);
-            for (Movie favourite : favourites) {
-                set.remove(favourite.movieDB);
-            }
-
-            list.clear();
-            list.addAll(set);
-
-            // Sortowanie po ocenie filmu
-            Collections.sort(list, new Comparator<MovieDb>() {
-                @Override
-                public int compare(MovieDb movie1, MovieDb movie2) {
-                    // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                    return movie1.getVoteAverage() > movie2.getVoteAverage() ? -1 : (movie1.getVoteAverage() < movie2.getVoteAverage()) ? 1 : 0;
-                }
-            });
-            return list;
+            return getRecommendedMovies();
         }
 
         @Override
@@ -173,6 +137,46 @@ public class RecommendedMoviesActivity extends AppCompatActivity {
             }
             movieAdapter.notifyDataSetChanged();
         }
+    }
+
+    private ArrayList<MovieDb> getRecommendedMovies() {
+        List<Movie> favourites = movieDao.getAll();
+        ArrayList<MovieDb> list = new ArrayList<>();
+
+        /**
+         * Pobiera filmy najwyżej oceniane i wyświetla je jako karty, jeżeli użytkownik nie posiada filmów ulubionych.
+         */
+        if (favourites.isEmpty()) {
+            TmdbMovies topRated = tmdbApi.getMovies();
+            MovieResultsPage resultTopRated = topRated.getTopRatedMovies(null, null);
+            for (MovieDb movieDb : resultTopRated) {
+                list.add(movieDb);
+            }
+        }
+
+        list.addAll(new CollaborativeRecommender().getRecommendations(favourites));
+        list.addAll(new PopularCastRecommender().getRecommendations(favourites));
+        list.addAll(new DirectorRecommender().getRecommendations(favourites));
+        list.addAll(new GenreRecommender().getRecommendations(favourites));
+        list.addAll(new LanguageRecommender().getRecommendations(favourites));
+
+        Set<MovieDb> set = new HashSet<>(list);
+        for (Movie favourite : favourites) {
+            set.remove(favourite.movieDB);
+        }
+
+        list.clear();
+        list.addAll(set);
+
+        // Sortowanie po ocenie filmu
+        Collections.sort(list, new Comparator<MovieDb>() {
+            @Override
+            public int compare(MovieDb movie1, MovieDb movie2) {
+                // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                return movie1.getVoteAverage() > movie2.getVoteAverage() ? -1 : (movie1.getVoteAverage() < movie2.getVoteAverage()) ? 1 : 0;
+            }
+        });
+        return list;
     }
 
     /**
