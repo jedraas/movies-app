@@ -11,24 +11,17 @@ This is an Android application for discovering nad tracking movies. App uses [th
 - See the details about the movie
 
 ### Screenshots: 
-
-![movieApp1](https://user-images.githubusercontent.com/50593682/104647528-4c58fd80-56b2-11eb-9be5-1414bce56172.png)
-
-![movieApp2](https://user-images.githubusercontent.com/50593682/104647548-54b13880-56b2-11eb-9aa3-553188b48913.png)
+<img src="https://user-images.githubusercontent.com/50593682/104648971-4106d180-56b4-11eb-9c98-68fc432ee3cb.png" width="300" height="500">
+<img src="https://user-images.githubusercontent.com/50593682/104648979-43692b80-56b4-11eb-8744-8c396ccd6eed.png" width="300" height="500">
 
 <br /><br />
-
-![movieApp3](https://user-images.githubusercontent.com/50593682/104647577-5f6bcd80-56b2-11eb-8e3e-3293cb208e68.png)
-3.png)
+<img src="https://user-images.githubusercontent.com/50593682/104648978-42d09500-56b4-11eb-869d-731eab868c44.png" width="300" height="500">
 
 <br /><br />
-
-![movieApp4](https://user-images.githubusercontent.com/50593682/104647614-698dcc00-56b2-11eb-8dea-67a2bc478d05.png)
+<img src="https://user-images.githubusercontent.com/50593682/104648976-42d09500-56b4-11eb-9812-eb78d8af8260.png" width="300" height="500">
 
 <br /><br />
-
-![movieApp5](https://user-images.githubusercontent.com/50593682/104647626-701c4380-56b2-11eb-9980-f62bb2364f85.png)
-
+<img src="https://user-images.githubusercontent.com/50593682/104648973-4237fe80-56b4-11eb-8180-6b29ad741d9e.png" width="300" height="500">
 
 
 
@@ -38,18 +31,6 @@ This is an Android application for discovering nad tracking movies. App uses [th
 - Picasso
 - Room Database
 - API themoviedb
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
