@@ -1,6 +1,7 @@
 # Android Movie Recommendation App
 
 This is an Android application for discovering nad tracking movies. App uses [themoviedb API](https://www.themoviedb.org/documentation/api).
+You can see this app on [YouTube](https://youtu.be/J0Gx6KGMOIs)
 
 ### Features: 
 - Discover top rated, upcoming, popular and now playing movies
